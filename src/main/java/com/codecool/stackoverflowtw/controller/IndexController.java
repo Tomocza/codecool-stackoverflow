@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("hello")
 public class IndexController {
-
-    @GetMapping
-    public String welcome() {
-        return "Hello!";
-    }
+  @GetMapping
+  public String welcome() {
+    return "Hello!";
+  }
 }
