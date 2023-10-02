@@ -1,4 +1,4 @@
-package com.codecool.stackoverflowtw.dao;
+package com.codecool.stackoverflowtw.dao.question;
 
 public class QuestionsDaoJdbc implements QuestionsDAO {
   @Override
