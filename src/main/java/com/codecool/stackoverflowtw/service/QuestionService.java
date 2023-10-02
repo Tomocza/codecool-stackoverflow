@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuestionService {
@@ -25,9 +26,12 @@ public class QuestionService {
                        .toList();
   }
 
-  public QuestionDTO getQuestionById(int id) {
-    QuestionModel result = questionsDAO.getQuestionById(id);
-    return new QuestionDTO(result.id(), result.title(), result.body(), result.createdAt());
+  public Optional<QuestionDTO> getQuestionById(int id) {
+    Optional<QuestionModel> result = questionsDAO.getQuestionById(id);
+    return result.map(questionModel -> new QuestionDTO(questionModel.id(),
+                                                       questionModel.title(),
+                                                       questionModel.body(),
+                                                       questionModel.createdAt()));
   }
 
   public boolean deleteQuestionById(int id) {

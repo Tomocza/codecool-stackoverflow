@@ -25,7 +25,7 @@ public class QuestionController {
 
   @GetMapping("/{id}")
   public QuestionDTO getQuestionById(@PathVariable int id) {
-    return questionService.getQuestionById(id);
+    return questionService.getQuestionById(id).orElse(null);
   }
 
   @PostMapping("/")

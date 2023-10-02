@@ -7,6 +7,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class QuestionsDaoJdbc implements QuestionsDAO {
   private final JdbcConnector connector;
@@ -36,8 +37,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
   }
 
   @Override
-  public QuestionModel getQuestionById(int id) {
-    QuestionModel result = null;
+  public Optional<QuestionModel> getQuestionById(int id) {
     String sql = "select * from questions where id = ?";
 
     try (Connection conn = connector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -45,14 +45,14 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
       ResultSet rs = pstmt.executeQuery();
 
       if (rs.next()) {
-        result = getQuestionFromResultSet(rs);
+        return Optional.of(getQuestionFromResultSet(rs));
       }
     }
     catch (SQLException e) {
       throw new RuntimeException(e);
     }
 
-    return result;
+    return Optional.empty();
   }
 
   @Override
