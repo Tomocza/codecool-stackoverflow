@@ -2,12 +2,13 @@ package com.codecool.stackoverflowtw.service;
 
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
-import com.codecool.stackoverflowtw.dao.QuestionsDAO;
+import com.codecool.stackoverflowtw.dao.question.QuestionModel;
+import com.codecool.stackoverflowtw.dao.question.QuestionsDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuestionService {
@@ -19,24 +20,25 @@ public class QuestionService {
   }
 
   public List<QuestionDTO> getAllQuestions() {
-    // TODO
-    return List.of(new QuestionDTO(1, "example title", "example desc", LocalDateTime.now()));
+    return questionsDAO.getAllQuestions()
+                       .stream()
+                       .map(e -> new QuestionDTO(e.id(), e.title(), e.body(), e.createdAt()))
+                       .toList();
   }
 
-  public QuestionDTO getQuestionById(int id) {
-    // TODO
-    questionsDAO.sayHi();
-    return new QuestionDTO(id, "example title", "example desc", LocalDateTime.now());
+  public Optional<QuestionDTO> getQuestionById(int id) {
+    Optional<QuestionModel> result = questionsDAO.getQuestionById(id);
+    return result.map(questionModel -> new QuestionDTO(questionModel.id(),
+                                                       questionModel.title(),
+                                                       questionModel.body(),
+                                                       questionModel.createdAt()));
   }
 
   public boolean deleteQuestionById(int id) {
-    // TODO
-    return false;
+    return questionsDAO.deleteQuestionById(id);
   }
 
   public int addNewQuestion(NewQuestionDTO question) {
-    // TODO
-    int createdId = 0;
-    return createdId;
+    return questionsDAO.addNewQuestion(question);
   }
 }
