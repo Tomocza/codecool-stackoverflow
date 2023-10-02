@@ -8,7 +8,7 @@ create table users
 (
     id            serial primary key,
     username      varchar(50) unique not null,
-    password      varchar(50)        not null,
+    pw_hash       varchar(50)        not null,
     registered_at timestamp default now()
 );
 
@@ -34,7 +34,7 @@ create table answers
 );
 
 --ADD INITIAL DATA--
-insert into users(username, password)
+insert into users(username, pw_hash)
 values ('user1', 'pw1'),
        ('user2', 'pw2'),
        ('user3', 'pw3');
