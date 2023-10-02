@@ -1,10 +1,17 @@
 package com.codecool.stackoverflowtw.dao.question;
 
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
+import com.codecool.stackoverflowtw.dao.connection.JdbcConnector;
 
 import java.util.List;
 
 public class QuestionsDaoJdbc implements QuestionsDAO {
+  private final JdbcConnector connector;
+
+  public QuestionsDaoJdbc(JdbcConnector connector) {
+    this.connector = connector;
+  }
+
   @Override
   public List<QuestionModel> getAllQuestions() {
     return null;
