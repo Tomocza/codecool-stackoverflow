@@ -22,7 +22,12 @@ public class QuestionService {
   public List<QuestionDTO> getAllQuestions() {
     return questionsDAO.getAllQuestions()
                        .stream()
-                       .map(e -> new QuestionDTO(e.id(), e.title(), e.body(), e.createdAt()))
+                       .map(e -> new QuestionDTO(e.id(),
+                                                 e.title(),
+                                                 e.body(),
+                                                 e.createdAt(),
+                                                 e.user_id(),
+                                                 e.answerCount()))
                        .toList();
   }
 
@@ -31,7 +36,9 @@ public class QuestionService {
     return result.map(questionModel -> new QuestionDTO(questionModel.id(),
                                                        questionModel.title(),
                                                        questionModel.body(),
-                                                       questionModel.createdAt()));
+                                                       questionModel.createdAt(),
+                                                       questionModel.user_id(),
+                                                       questionModel.answerCount()));
   }
 
   public boolean deleteQuestionById(int id) {

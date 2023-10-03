@@ -19,7 +19,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
   @Override
   public List<QuestionModel> getAllQuestions() {
     List<QuestionModel> result = new ArrayList<>();
-    String sql = "select * from questions";
+    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(a.id) as answer_count from questions q left join public.answers a on q.id = a.question_id group by q.id";
 
     try (Connection conn = connector.getConnection()) {
       Statement stmt = conn.createStatement();
@@ -38,7 +38,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
   @Override
   public Optional<QuestionModel> getQuestionById(int id) {
-    String sql = "select * from questions where id = ?";
+    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(a.id) as answer_count from questions q left join public.answers a on q.id = a.question_id where q.id = ? group by q.id";
 
     try (Connection conn = connector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
       pstmt.setInt(1, id);
@@ -100,6 +100,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     int userId = rs.getInt("user_id");
     LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
     LocalDateTime modifiedAt = rs.getTimestamp("modified_at").toLocalDateTime();
-    return new QuestionModel(id, title, body, userId, createdAt, modifiedAt);
+    int answerCount = rs.getInt("answer_count");
+    return new QuestionModel(id, title, body, userId, createdAt, modifiedAt, answerCount);
   }
 }
