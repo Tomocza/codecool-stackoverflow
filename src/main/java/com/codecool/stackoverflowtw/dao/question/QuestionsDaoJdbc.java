@@ -23,8 +23,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
             "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(a.id) as answer_count from " +
             "questions q left join public.answers a on q.id = a.question_id group by q.id";
     
-    try (Connection connection = connector.getConnection()) {
-      Statement statement = connection.createStatement();
+    try (Connection connection = connector.getConnection(); Statement statement = connection.createStatement()) {
       ResultSet resultSet = statement.executeQuery(sql);
       
       while (resultSet.next()) {
