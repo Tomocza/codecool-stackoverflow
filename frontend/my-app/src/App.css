@@ -1,0 +1,143 @@
+body{
+  background-color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+.App {
+}
+
+.questionList{
+  margin: 0 auto;
+  /* margin-top: 8vh; */
+  text-align: left;
+  border: 1px rgb(227, 230, 232) solid;
+  border-style: none none none solid;
+  width: 50%;
+  height: 98vh;
+}
+.questionList h2 {
+  color: rgb(40, 43, 47);
+  margin-left: 2vw;
+  margin-top: -0.5vh;
+  margin-bottom: 8vh;
+  font-weight: normal;
+}
+.questionList > div{
+  padding-top: 12vh;
+}
+
+.question{
+  padding-top: 2.5vh !important;
+  padding-bottom: 2.5vh !important;
+  display: grid;
+  grid-template-columns: 9vw 40vw;
+  border-top: 1px solid rgb(186, 191, 196);
+}
+
+.askQuestionButton {
+  position: absolute;
+  top: 10vh;
+  right: 26vw;
+  color: white !important;
+  background-color: rgb(10, 149, 255) !important;
+  border-radius: 5px !important;
+  font-family: 'Open Sans', sans-serif;
+  /* margin-left: 1vw; */
+  padding: 0.5rem 1rem;
+  /* font-weight: bold; */
+  border: none;
+
+}
+
+.askQuestionButton:hover{
+  cursor: pointer;
+  background-color: rgb(0, 116, 204) !important;
+}
+
+
+.questionVotes{
+  text-align: right;
+  line-height: 1.8;
+  font-size: 12px;
+  color: rgb(12, 13, 14);
+}
+.questionUser{
+  /* display: block; */
+  /* text-align: right; */
+  margin-right: 0.5vw;
+  line-height: 1.8;
+  font-size: 12px;
+  white-space: nowrap;
+  color: rgb(0, 116, 214);
+}
+
+.questionUser:hover{
+  cursor: pointer;
+  color: rgb(10, 178, 255);
+}
+
+.questionDate{
+  display: block;
+  /* margin-left: 0.5vw; */
+  text-align: right;
+  line-height: 1.8;
+  font-size: 12px;
+  color: rgb(106, 115, 124);
+  white-space: nowrap;
+}
+.questionAnswers{
+  text-align: right;
+  line-height: 1.8;
+  font-size: 12px;
+  color: rgb(106, 115, 124)
+}
+
+.questionText{
+  width: fit-content;
+  margin-left: 1vw;
+  font-weight: 400;
+  /* font-size: 20px; */
+  color: rgb(0, 116, 214);
+}
+.questionText:hover{
+  cursor: pointer;
+  color: rgb(10, 178, 255);
+}
+
+
+@media (max-width: 900px) {
+    .questionList {
+    width: 100%;
+    border: none;    
+  } 
+  .question{
+    display: grid;
+    grid-template-columns: 12vw 82vw;
+    border-top: 1px solid rgb(186, 191, 196);
+  }
+  .askQuestionButton{
+    right: 4vw;
+  }  
+}
+
+@media (max-width: 600px){
+  .question{
+    display: grid;
+    grid-template-columns: 16vw 78vw;
+    border-top: 1px solid rgb(186, 191, 196);
+  }
+  .questionList{
+    margin-top: 4vh;
+  }
+  .askQuestionButton{
+    top: 12vh;
+  }
+}
+
+@media (max-height: 600px){
+  .questionList{
+    margin-top: 40px;
+  }
+  .askQuestionButton{
+    top: 75px;
+  }
+}
