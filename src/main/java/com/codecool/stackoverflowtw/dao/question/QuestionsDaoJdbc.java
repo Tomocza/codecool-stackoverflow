@@ -1,6 +1,6 @@
 package com.codecool.stackoverflowtw.dao.question;
 
-import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
+import com.codecool.stackoverflowtw.controller.dto.question.NewQuestionDTO;
 import com.codecool.stackoverflowtw.dao.connection.JdbcConnector;
 
 import java.sql.*;

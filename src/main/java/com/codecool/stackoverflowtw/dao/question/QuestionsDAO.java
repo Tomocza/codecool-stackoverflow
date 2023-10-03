@@ -1,6 +1,6 @@
 package com.codecool.stackoverflowtw.dao.question;
 
-import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
+import com.codecool.stackoverflowtw.controller.dto.question.NewQuestionDTO;
 
 import java.util.List;
 import java.util.Optional;
