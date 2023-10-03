@@ -36,7 +36,7 @@ public class StackoverflowTwApplication {
   public QuestionsDAO questionsDAO(JdbcConnector connector) {
     return new QuestionsDaoJdbc(connector);
   }
-
+  
   @Bean
   @Autowired
   public AnswersDAO answersDAO(JdbcConnector connector) {

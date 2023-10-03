@@ -19,7 +19,7 @@ public class UsersDaoJdbc implements UsersDAO {
   @Override
   public List<UserModel> getAll() {
     List<UserModel> result = new ArrayList<>();
-    String sql = "select u.id, u.username, u.registered_at from users u";
+    String sql = "select u.id, u.username, u.pw_hash, u.registered_at from users u";
     
     try (Connection connection = connector.getConnection(); Statement statement = connection.createStatement()) {
       ResultSet resultSet = statement.executeQuery(sql);
@@ -36,7 +36,7 @@ public class UsersDaoJdbc implements UsersDAO {
   
   @Override
   public Optional<UserModel> getById(int id) {
-    String sql = "select u.id, u.username, u.registered_at from users u where u.id = ?";
+    String sql = "select u.id, u.username, u.pw_hash, u.registered_at from users u where u.id = ?";
     
     try (Connection connection = connector.getConnection();
          PreparedStatement statement = connection.prepareStatement(sql)) {
