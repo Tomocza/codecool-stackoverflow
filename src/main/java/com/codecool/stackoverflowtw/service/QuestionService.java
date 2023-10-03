@@ -1,7 +1,7 @@
 package com.codecool.stackoverflowtw.service;
 
-import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
-import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
+import com.codecool.stackoverflowtw.controller.dto.question.NewQuestionDTO;
+import com.codecool.stackoverflowtw.controller.dto.question.QuestionDTO;
 import com.codecool.stackoverflowtw.dao.question.QuestionModel;
 import com.codecool.stackoverflowtw.dao.question.QuestionsDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,12 @@ public class QuestionService {
   public List<QuestionDTO> getAllQuestions() {
     return questionsDAO.getAllQuestions()
                        .stream()
-                       .map(e -> new QuestionDTO(e.id(), e.title(), e.body(), e.createdAt()))
+                       .map(e -> new QuestionDTO(e.id(),
+                                                 e.title(),
+                                                 e.body(),
+                                                 e.createdAt(),
+                                                 e.user_id(),
+                                                 e.answerCount()))
                        .toList();
   }
 
@@ -31,7 +36,9 @@ public class QuestionService {
     return result.map(questionModel -> new QuestionDTO(questionModel.id(),
                                                        questionModel.title(),
                                                        questionModel.body(),
-                                                       questionModel.createdAt()));
+                                                       questionModel.createdAt(),
+                                                       questionModel.user_id(),
+                                                       questionModel.answerCount()));
   }
 
   public boolean deleteQuestionById(int id) {
