@@ -4,6 +4,8 @@ import com.codecool.stackoverflowtw.dao.connection.JdbcConnector;
 import com.codecool.stackoverflowtw.dao.connection.PsqlConnector;
 import com.codecool.stackoverflowtw.dao.question.QuestionsDAO;
 import com.codecool.stackoverflowtw.dao.question.QuestionsDaoJdbc;
+import com.codecool.stackoverflowtw.dao.user.UsersDAO;
+import com.codecool.stackoverflowtw.dao.user.UsersDaoJdbc;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -31,5 +33,11 @@ public class StackoverflowTwApplication {
   @Autowired
   public QuestionsDAO questionsDAO(JdbcConnector connector) {
     return new QuestionsDaoJdbc(connector);
+  }
+  
+  @Bean
+  @Autowired
+  public UsersDAO usersDAO(JdbcConnector connector) {
+    return new UsersDaoJdbc(connector);
   }
 }
