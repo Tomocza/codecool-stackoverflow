@@ -15,7 +15,7 @@ public class StackoverflowTwApplication {
   public static void main(String[] args) {
     SpringApplication.run(StackoverflowTwApplication.class, args);
   }
-
+  
   @Bean
   public JdbcConnector connector() {
     Dotenv dotenv = Dotenv.load();
@@ -26,7 +26,7 @@ public class StackoverflowTwApplication {
     String password = dotenv.get("DB_PW");
     return new PsqlConnector(host, port, name, username, password);
   }
-
+  
   @Bean
   @Autowired
   public QuestionsDAO questionsDAO(JdbcConnector connector) {

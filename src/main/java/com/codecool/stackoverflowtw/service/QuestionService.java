@@ -12,13 +12,13 @@ import java.util.Optional;
 
 @Service
 public class QuestionService {
-  private QuestionsDAO questionsDAO;
-
+  private final QuestionsDAO questionsDAO;
+  
   @Autowired
   public QuestionService(QuestionsDAO questionsDAO) {
     this.questionsDAO = questionsDAO;
   }
-
+  
   public List<QuestionDTO> getAllQuestions() {
     return questionsDAO.getAllQuestions()
                        .stream()
@@ -30,7 +30,7 @@ public class QuestionService {
                                                  e.answerCount()))
                        .toList();
   }
-
+  
   public Optional<QuestionDTO> getQuestionById(int id) {
     Optional<QuestionModel> result = questionsDAO.getQuestionById(id);
     return result.map(questionModel -> new QuestionDTO(questionModel.id(),
@@ -40,11 +40,11 @@ public class QuestionService {
                                                        questionModel.user_id(),
                                                        questionModel.answerCount()));
   }
-
+  
   public boolean deleteQuestionById(int id) {
     return questionsDAO.deleteQuestionById(id);
   }
-
+  
   public int addNewQuestion(NewQuestionDTO question) {
     return questionsDAO.addNewQuestion(question);
   }

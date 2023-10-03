@@ -11,7 +11,7 @@ public class PsqlConnector implements JdbcConnector {
   private final String dbName;
   private final String username;
   private final String password;
-
+  
   public PsqlConnector(String host, String port, String dbName, String username, String password) {
     this.host = host;
     this.port = port;
@@ -19,7 +19,7 @@ public class PsqlConnector implements JdbcConnector {
     this.username = username;
     this.password = password;
   }
-
+  
   @Override
   public Connection getConnection() {
     Connection conn = null;
@@ -29,8 +29,7 @@ public class PsqlConnector implements JdbcConnector {
       props.setProperty("user", username);
       props.setProperty("password", password);
       conn = DriverManager.getConnection(url, props);
-    }
-    catch (SQLException e) {
+    } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
     return conn;
