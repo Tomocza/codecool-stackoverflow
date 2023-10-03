@@ -1,0 +1,136 @@
+
+.homePage{
+    margin: 0 auto;
+    color: white;
+    text-align: center;
+    margin-top: 15vh;
+    background-color: rgb(40, 43, 47);
+    border-radius: 20px;
+    font-family: 'Open Sans', sans-serif;
+    width: 80%;
+    height: 100vh;
+    z-index: -10;
+  }
+
+  .homePageOptions{
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    display: grid;
+    align-self: center;
+    grid-template-columns: 22vw 22vw;
+    gap: 2vw;
+    height: 26vh;
+    z-index: -0.1;
+  }
+  
+  .homePage > h1{
+    padding: 1vh;
+    padding-top: 44vh;
+    font-family: 'Roboto Slab', 'sans-serif';
+    font-size: 56px;
+    line-height: 1.3;
+  }
+
+  .option1{
+    background-color: rgb(254, 227, 205);
+    border-radius: 10px;
+    color: black;
+}
+
+  .option2{
+    background-color: rgb(205, 233, 254);
+    border-radius: 10px;
+    color: black;
+  }
+
+  .description{
+    left: 50%;
+    transform: translate(-50%, 0);    
+    position: relative;
+    width: 17vw;
+    line-height: 1.8;
+    margin-top: 6vh;
+  }
+
+  .option1Button{
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    color: white;
+     background-color: rgb(246, 116, 13);
+    border-radius: 5px;
+    font-family: 'Open Sans', sans-serif;
+    /* margin-left: 1vw; */
+    padding: 0.5rem 1rem;
+    /* font-weight: bold; */  border: none;
+  }
+
+  
+.option1Button:hover{
+    cursor: pointer;
+    background-color: rgb(218, 104, 11);
+  }
+
+  .option2Button{
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    color: white;
+     background-color: rgb(10, 149, 255);
+    border-radius: 5px;
+    font-family: 'Open Sans', sans-serif;
+    /* margin-left: 1vw; */
+    padding: 0.5rem 1rem;
+    /* font-weight: bold; */  border: none;
+  }
+
+  
+.option2Button:hover{
+    cursor: pointer;
+    background-color: rgb(0, 116, 204) !important;
+  }
+
+
+  @media (max-width: 1160px){
+    .homePageOptions{
+        width: 70%;
+        grid-template-columns: 45% 45%;
+        margin-left: 3vw;
+    }
+    .description {
+        width: 70%;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .homePage{
+        width: 98%;
+    }
+    .homePageOptions{
+        top: 5%;
+        width: 70%;
+        grid-template-columns: 90%;
+        margin-left: 3vw;
+    }
+    .description{
+        width: 70%;
+    }
+    .option1Button, .option2Button{
+        margin-bottom: 1.5vh;
+    }
+    .homePage > h1 {
+        padding-top: 60vh;
+    }    
+  }
+
+  @media (max-width: 700px){
+    .homePage > h1 {
+        font-size: 42px;
+    }    
+  }
+  
+  @media (max-width: 580px){
+    .homePage > h1 {
+        font-size: 30px;
+    }    
+  }
