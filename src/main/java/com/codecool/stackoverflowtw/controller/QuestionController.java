@@ -10,31 +10,31 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("questions")
+@RequestMapping ("questions")
 public class QuestionController {
   private final QuestionService questionService;
-
+  
   @Autowired
   public QuestionController(QuestionService questionService) {
     this.questionService = questionService;
   }
-
-  @GetMapping("/all")
+  
+  @GetMapping ("/all")
   public List<BriefQuestionDTO> getAllQuestions() {
     return questionService.getAllQuestions();
   }
-
-  @GetMapping("/{id}")
+  
+  @GetMapping ("/{id}")
   public DetailedQuestionDTO getQuestionById(@PathVariable int id) {
     return questionService.getQuestionById(id).orElse(null);
   }
-
-  @PostMapping("/")
+  
+  @PostMapping ("/")
   public int addNewQuestion(@RequestBody NewQuestionDTO question) {
     return questionService.addNewQuestion(question);
   }
-
-  @DeleteMapping("/{id}")
+  
+  @DeleteMapping ("/{id}")
   public boolean deleteQuestionById(@PathVariable int id) {
     return questionService.deleteQuestionById(id);
   }

@@ -6,6 +6,8 @@ import com.codecool.stackoverflowtw.dao.connection.JdbcConnector;
 import com.codecool.stackoverflowtw.dao.connection.PsqlConnector;
 import com.codecool.stackoverflowtw.dao.question.QuestionsDAO;
 import com.codecool.stackoverflowtw.dao.question.QuestionsDaoJdbc;
+import com.codecool.stackoverflowtw.dao.user.UsersDAO;
+import com.codecool.stackoverflowtw.dao.user.UsersDaoJdbc;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +19,7 @@ public class StackoverflowTwApplication {
   public static void main(String[] args) {
     SpringApplication.run(StackoverflowTwApplication.class, args);
   }
-
+  
   @Bean
   public JdbcConnector connector() {
     Dotenv dotenv = Dotenv.load();
@@ -28,16 +30,22 @@ public class StackoverflowTwApplication {
     String password = dotenv.get("DB_PW");
     return new PsqlConnector(host, port, name, username, password);
   }
-
+  
   @Bean
   @Autowired
   public QuestionsDAO questionsDAO(JdbcConnector connector) {
     return new QuestionsDaoJdbc(connector);
   }
-
+  
   @Bean
   @Autowired
   public AnswersDAO answersDAO(JdbcConnector connector) {
     return new AnswersDAOJdbc(connector);
+  }
+  
+  @Bean
+  @Autowired
+  public UsersDAO usersDAO(JdbcConnector connector) {
+    return new UsersDaoJdbc(connector);
   }
 }

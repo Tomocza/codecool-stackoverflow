@@ -15,18 +15,22 @@
 - Write tests for the service layer
 
 #### Extra:
+
 - OPTIONAL: Admin user type can delete any question or answer
 - OPTIONAL: Filter by question titles  (location: main page)
 - OPTIONAL: Feature to tag questions
 - OPTIONAL: Feature to edit questions (limited to the ones created by the user)
 - OPTIONAL: Feature to edit answers (limited to the ones created by the user)
-- OPTIONAL: Feature to calculate reputation of the user and display them differently if they are very active on the site (display reputation on user list page too)
+- OPTIONAL: Feature to calculate reputation of the user and display them differently if they are very active on the
+  site (display reputation on user list page too)
 
-## General requirements: 
+## General requirements:
+
 - Create an SQL database to store your data
-- Stick to Model View Controller layers (Frontend doesn't do calculations, only displays the data, SQL handles the data manipulation)
-- Do the base data features first and add user management later, extend already existing ones if necessary 
+- Stick to Model View Controller layers (Frontend doesn't do calculations, only displays the data, SQL handles the data
+  manipulation)
+- Do the base data features first and add user management later, extend already existing ones if necessary
 - Aim for the code to keep SOLID, OOP and Clean code principles
 - Focus on the Java & SQL parts and do minimal frontend as it is not the goal of this project
-- Vanilla Javascript and HTML is suggested for frontend, nothing more complicated (like frameworks) is necessary 
+- Vanilla Javascript and HTML is suggested for frontend, nothing more complicated (like frameworks) is necessary
 - If you need new API endpoints ask mentors to create them for you
