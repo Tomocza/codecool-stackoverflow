@@ -1,0 +1,136 @@
+.answerList{
+    margin: 0 auto;
+    /* margin-top: 8vh; */
+    text-align: left;
+    border: 1px rgb(227, 230, 232) solid;
+    border-style: none none none solid;
+    width: 50%;
+    height: 98vh;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .answerList h2 {
+    color: rgb(40, 43, 47);
+    margin-left: 2vw;
+    /* margin-top: -0.5vh; */
+    margin-bottom: 8vh;
+    font-weight: normal;
+  }
+  .answerList > div{
+    padding-top: 10vh;
+  }
+  
+  .answer{
+    padding-top: 2.5vh !important;
+    padding-bottom: 2.5vh !important;
+    display: grid;
+    grid-template-columns: 9vw 40vw;
+    border-top: 1px solid rgb(186, 191, 196);
+  }
+
+  .answerVotes{
+    text-align: right;
+    line-height: 1.8;
+    font-size: 12px;
+    color: rgb(12, 13, 14);
+  }
+
+  .answerText{
+    width: fit-content;
+    margin-left: 1vw;
+    font-weight: 400;
+    /* font-size: 20px; */
+    /* color: rgb(0, 116, 214); */
+  }
+  
+  .answerUser{
+    /* display: block; */
+    /* text-align: right; */
+    margin-right: 0.5vw;
+    line-height: 1.8;
+    font-size: 12px;
+    white-space: nowrap;
+    color: rgb(0, 116, 214);
+  }
+  
+  .answerUser:hover{
+    cursor: pointer;
+    color: rgb(10, 178, 255);
+  }
+  
+  .answerDate{
+    display: block;
+    /* margin-left: 0.5vw; */
+    text-align: right;
+    line-height: 1.8;
+    font-size: 12px;
+    color: rgb(106, 115, 124);
+    white-space: nowrap;
+  }
+
+  .areaLabel{
+    margin-left: 2.5vw;
+    font-size: 18px;
+  }
+
+  textarea{
+    margin-top: 2vh;
+    margin-left: 2.5vw;
+    height: 20vh;
+    width: 90%;
+    padding: 10px;
+    font-size: 15px;
+    font-family: 'Open Sans', sans-serif;
+    color:rgb(82, 89, 96);
+    padding-left: 10px;
+    border: 1px solid rgb(186, 191, 196);
+    border-radius: 5px;
+  }
+
+  textarea:focus {
+    outline: none;
+    border-color: rgb(107, 187, 247);
+    box-shadow: 0 0 0 4px rgb(217, 234, 247);
+  }
+  .postButton{
+    margin-left: 2.5vw;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    color: white;
+     background-color: rgb(10, 149, 255);
+    border-radius: 5px;
+    font-family: 'Open Sans', sans-serif;
+    /* margin-left: 1vw; */
+    padding: 0.5rem 1rem;
+    /* font-weight: bold; */  border: none;
+  }
+
+  
+.postButton:hover{
+    cursor: pointer;
+    background-color: rgb(0, 116, 204) !important;
+  }
+
+
+
+@media (max-width: 900px) {
+    .answerList {
+    width: 100%;
+    border: none;    
+  } 
+  .answer{
+    display: grid;
+    grid-template-columns: 12vw 82vw;
+    border-top: 1px solid rgb(186, 191, 196);
+  }  
+}
+
+@media (max-width: 600px){
+  .answer{
+    display: grid;
+    grid-template-columns: 16vw 78vw;
+    border-top: 1px solid rgb(186, 191, 196);
+  }
+  .answerList{
+    margin-top: 4vh;
+  }
+}
