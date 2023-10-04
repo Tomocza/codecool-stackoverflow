@@ -26,16 +26,16 @@ public class UserService {
     return usersDAO.getAll().stream().map(e -> new UserDTO(e.id(), e.username(), e.registeredAt())).toList();
   }
   
-  public Optional<UserDTO> login(UserLoginDTO userLoginDTO){
+  public int login(UserLoginDTO userLoginDTO){
     Optional<UserModel> user = usersDAO.getByName(userLoginDTO.username());
     if (user.isEmpty()){
-      return Optional.empty();
+      return -1;
     }
     UserModel presentUser = user.get();
-    if (BCrypt.checkpw(userLoginDTO.pwd(), presentUser.pwHash())){
-      return Optional.of(transformFromUserModel(presentUser));
+    if (BCrypt.checkpw(userLoginDTO.password(), presentUser.pwHash())){
+      return presentUser.id();
     }
-    return Optional.empty();
+    return -1;
   }
   
   private UserDTO transformFromUserModel(UserModel model){
