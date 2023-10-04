@@ -2,8 +2,6 @@ body{
   background-color: white;
   font-family: 'Open Sans', sans-serif;
 }
-.App {
-}
 
 .questionList{
   margin: 0 auto;
@@ -21,16 +19,23 @@ body{
   margin-bottom: 8vh;
   font-weight: normal;
 }
+
+
 .questionList > div{
   padding-top: 12vh;
 }
 
 .question{
+  font-weight: 400;
   padding-top: 2.5vh !important;
   padding-bottom: 2.5vh !important;
   display: grid;
   grid-template-columns: 9vw 40vw;
   border-top: 1px solid rgb(186, 191, 196);
+}
+
+.questionTextContainer > a{
+  text-decoration: none;
 }
 
 .askQuestionButton {
@@ -46,6 +51,12 @@ body{
   /* font-weight: bold; */
   border: none;
 
+}
+
+
+.titleDescription{
+  font-size: 10px;
+  color: rgb(40, 43, 47);
 }
 
 .askQuestionButton:hover{

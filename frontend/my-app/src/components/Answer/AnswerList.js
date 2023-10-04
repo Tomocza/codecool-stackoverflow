@@ -9,41 +9,62 @@ function AnswerList(){
     const {id} = useParams();
 
     useEffect(() => {
+      async function fetchQuestions(){
+        const response = await fetch(`/questions/${id}`);
+        const newQuestion = await response.json();
+        setQuestion(newQuestion);
+      }
+      fetchQuestions();
+      }, []);
+
+    useEffect(() => {
       async function fetchAnswers(){
-        const response = await fetch('http://localhost:8080/answers');
+        const response = await fetch(`/answers/question/${id}`);
         const answers = await response.json();
         setAnswers(answers);
       }
-    //   fetchAnswers();
-        addAnswers();
-        addQuestion();
+      fetchAnswers();
+        // addAnswers();
       }, []);
 
-    function addQuestion(){
-        const questions = ["How are you?", "Is this stack overflow?"];
-        setQuestion(questions[id]);
-    }
 
   function addAnswers(){
 
     setAnswers([{
-        answer: "Yes!",
+        body: "Yes!",
         numberOfVotes: 17,
-        user: "Sanyi",
-        date: "2023-10-02"},
-        {answer: "No..?",
+        userName: "Sanyi",
+        createdAt: "2023-10-02"},
+        {body: "No..?",
         numberOfVotes: 2,
-        user: "Major Anna",
-        date: "2023-09-28"}]);
+        userName: "Major Anna",
+        createdAt: "2023-09-28"}]);
   }
     return(
         <div className="answerList">
             <div>
-                <h2 className="questionTitle">{question}</h2>
+                <h2 className="questionTitle">{question.title}</h2>
+                <div className="questContainer">
+                  <span className="questCreatedAt">{question.createdAt}</span>
+                  <span className="questUser">{question.userName}</span>
+                </div>
+                <div className="questBodyContainer">
+                  <div className="questVoteContainer">
+                    <button className="voteButton">
+                      <span class="material-symbols-outlined">arrow_drop_up</span>
+                    </button>
+                    <div className="questRating">100</div>
+                    <button className="voteButton">
+                      <span class="material-symbols-outlined">arrow_drop_down</span>
+                    </button>
+                  </div>
+                  <div className='questBody'>{question.body}</div>
+                </div>
                 {/* <button className='askQuestionButton'>Ask Question</button> */}
             </div>
+            <div className="answerCountTitle">{answers.length} Answers</div>
             {answers.map((answer) => (
-                <Answer answer={answer} key={answer.numberOfVotes}/>
+                <Answer answer={answer} key={answer.id}/>
             ))}
             <div className='areaLabel'>Your Answer</div>
             <textarea></textarea>

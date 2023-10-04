@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import NavBar from "./components/Layout/NavBar";
 import QuestionList from "./components/Question/QuestionList";
 import HomePage from "./components/HomePage/HomePage";
+import QuestionForm from "./components/Question/QuestionForm";
 
 import "./index.css";
 import AnswerList from "./components/Answer/AnswerList";
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/answers/:id",
         element: <AnswerList />,
+      },
+      {
+        path: "/question/ask",
+        element: <QuestionForm />,
       }
     ],
   },
