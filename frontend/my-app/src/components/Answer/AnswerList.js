@@ -50,7 +50,7 @@ function AnswerList() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newAnswer)
     });
-    setBody(() => "");
+    // setBody(() => "");   
     refreshAnswers();
   }
 

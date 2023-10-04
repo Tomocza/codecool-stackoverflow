@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import "./QuestionForm.css";
 function QuestionForm(){
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() =>{
         document.body.classList.add('background');
@@ -30,9 +32,9 @@ function QuestionForm(){
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(newPost)
         });
-        window.location.replace('http://localhost:3000/questions');
-        setBody(() => "");
-        setTitle(() => "");
+        navigate('/questions');
+        // setBody(() => "");
+        // setTitle(() => "");
       }
       function handleSubmit(){
         if (title.length >= 2 && body.length >= 5){

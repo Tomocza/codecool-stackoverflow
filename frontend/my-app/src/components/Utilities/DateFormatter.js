@@ -1,29 +1,39 @@
-function DateFormatter({date}){
-    function formatDate(){
+function DateFormatter({ date }) {
+    function formatDate() {
         let formattedDate = "";
-        let parsedDate = new Date(date);
-        formattedDate += 1900 + +parsedDate.getYear();
-        formattedDate += "-" + extendToTwoDigits(parsedDate.getMonth());
-        formattedDate += "-" + extendToTwoDigits(parsedDate.getDate());
-        formattedDate += " " + extendToTwoDigits(parsedDate.getHours());
-        formattedDate += ":" + extendToTwoDigits(parsedDate.getMinutes());
-        formattedDate += ":" + extendToTwoDigits(parsedDate.getSeconds());
+        if (Array.isArray(date)) {
 
+            formattedDate += extendToTwoDigits(date[0]);
+            formattedDate += "-" + extendToTwoDigits(date[1]);
+            formattedDate += "-" + extendToTwoDigits(date[2]);
+            formattedDate += " " + extendToTwoDigits(date[3]);
+            formattedDate += ":" + extendToTwoDigits(date[4]);
+            formattedDate += ":" + extendToTwoDigits(date[5]);
 
+        } else {
+            let parsedDate = new Date(date);
+            formattedDate += 1900 + +parsedDate.getYear();
+            formattedDate += "-" + extendToTwoDigits(parsedDate.getMonth());
+            formattedDate += "-" + extendToTwoDigits(parsedDate.getDate());
+            formattedDate += " " + extendToTwoDigits(parsedDate.getHours());
+            formattedDate += ":" + extendToTwoDigits(parsedDate.getMinutes());
+            formattedDate += ":" + extendToTwoDigits(parsedDate.getSeconds());
+        }
+        //     console.log(date);
 
         return formattedDate;
     }
 
-    function extendToTwoDigits(datePart){
+    function extendToTwoDigits(datePart) {
         let extendedDatePart = "";
-        if (datePart.toString().length === 1){
+        if (datePart.toString().length === 1) {
             extendedDatePart += "0" + datePart;
         } else {
             extendedDatePart += datePart;
         }
         return extendedDatePart;
     }
-    return(
+    return (
         <>
             {formatDate()}
         </>

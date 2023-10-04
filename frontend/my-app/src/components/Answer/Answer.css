@@ -106,7 +106,6 @@
     /* font-weight: bold; */  border: none;
   }
 
-  
 .postButton:hover{
     cursor: pointer;
     background-color: rgb(0, 116, 204) !important;
@@ -125,6 +124,7 @@
   }
   .questBodyContainer{
     margin-left: 3vw;
+    /* background-color: rgb(248,249,249); */
   }
 
   .questVoteContainer, .answerVoteContainer{
@@ -153,8 +153,12 @@
   }
 
   .questBody{
-    margin-left: 1vw;
-    margin-top: 1vh;
+    /* margin-left: 0vw;
+    margin-top: 0vh; */
+    padding-top: 1vh;
+    padding-left: 1vh;
+    margin: 0;
+    /* background-color: rgb(248,249,249); */
   }
 
   .voteButton{
@@ -171,6 +175,7 @@
   }
 
   .answerCountTitle{
+    padding-top: 0vh !important;
     margin: 2.5vh;
     margin-left: 2.5vw;
   }

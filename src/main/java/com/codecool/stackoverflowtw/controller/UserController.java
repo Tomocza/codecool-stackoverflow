@@ -17,7 +17,8 @@ import java.util.Optional;
 @RequestMapping ("users")
 public class UserController {
   private final UserService userService;
-  
+  private static final String DOMAIN = "localhost";
+  private static final int EXPIRY_IN_SECONDS = 3600;
   @Autowired
   public UserController(UserService userService) {
     this.userService = userService;
@@ -37,7 +38,7 @@ public class UserController {
   public int register(@RequestBody NewUserDTO user) {
     return userService.register(user);
   }
-  
+
   @PostMapping ("/login")
   public int login(@RequestBody UserLoginDTO user, HttpServletResponse response) {
     Optional<SessionDTO> sessionDTO = userService.login(user);
@@ -46,6 +47,10 @@ public class UserController {
     }
     String sessionId = sessionDTO.get().session_id();
     Cookie cookie = new Cookie("session_id", sessionId);
+    cookie.setHttpOnly(true);
+    cookie.setDomain(DOMAIN);
+    cookie.setPath("/");
+    cookie.setMaxAge(EXPIRY_IN_SECONDS);
     response.addCookie(cookie);
     return sessionDTO.get().user_id();
   }

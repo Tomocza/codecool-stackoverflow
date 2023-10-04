@@ -4,34 +4,33 @@ import "./Answer.css"
 function Answer({answer}){
     const [rating, setRating] = useState(answer.rating);
  
-    //   async function vote(newVote){
-    //     const response = await fetch('/answers/votes',{
-    //       method: 'POST',
-    //       headers: {'Content-Type': 'application/json'},
-    //       body: JSON.stringify(newVote)
-    //   });
-    //   }
+      async function vote(newVote){
+        const response = await fetch('/answers/votes',{
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(newVote)
+      });
+      const newRating = await response.json();
+      setRating(() => newRating);
+      console.log(newRating);
+      }
     
       async function voteUp() {
-        // const newVote = {
-        //   userId: 2,
-        //   answerId: answer.id,
-        //   value: 1
-        // }
-        // await vote(newVote);
-        // updateAnswer();
-        setRating(() => rating+1);
+        const newVote = {
+          userId: 2,
+          answerId: answer.id,
+          value: 1
+        }
+        await vote(newVote);
       }
     
       async function voteDown() {
-        // const newVote = {
-        //   userId: 2,
-        //   answerId: answer.id,
-        //   value: -1
-        // }
-        // await vote(newVote);
-        // updateQuestion();
-        setRating(() => rating-1);
+        const newVote = {
+          userId: 2,
+          answerId: answer.id,
+          value: -1
+        }
+        await vote(newVote);
       }
     return(
         <div className="answerContainer">
