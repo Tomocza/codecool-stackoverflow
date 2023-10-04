@@ -38,7 +38,6 @@ public class UserController {
   public int register(@RequestBody NewUserDTO user) {
     return userService.register(user);
   }
-
   @PostMapping ("/login")
   public int login(@RequestBody UserLoginDTO user, HttpServletResponse response) {
     Optional<SessionDTO> sessionDTO = userService.login(user);
