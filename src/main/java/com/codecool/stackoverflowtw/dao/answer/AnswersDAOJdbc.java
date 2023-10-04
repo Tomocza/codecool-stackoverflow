@@ -98,12 +98,13 @@ public class AnswersDAOJdbc implements AnswersDAO {
   @Override
   public boolean addVoteToAnswer(AnswerVoteDTO answerVoteDTO) {
     boolean result = false;
-    String sql = "insert into answer_votes(answer_id, user_id, value) values(?,?,?)";
+    String sql = "insert into answer_votes(answer_id, user_id, value) values(?,?,?) on conflict (answer_id, user_id) do update set value = ?";
 
     try (Connection conn = connector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
       pstmt.setInt(1, answerVoteDTO.answerId());
       pstmt.setInt(2, answerVoteDTO.userId());
       pstmt.setInt(3, answerVoteDTO.value());
+      pstmt.setInt(4, answerVoteDTO.value());
       result = pstmt.executeUpdate() > 0;
     }
     catch (SQLException e) {
