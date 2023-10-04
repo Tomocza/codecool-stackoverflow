@@ -1,15 +1,47 @@
+import { useState } from 'react';
 import DateFormatter from "../Utilities/DateFormatter";
 import "./Answer.css"
 function Answer({answer}){
+    const [rating, setRating] = useState(answer.rating);
+ 
+    //   async function vote(newVote){
+    //     const response = await fetch('/answers/votes',{
+    //       method: 'POST',
+    //       headers: {'Content-Type': 'application/json'},
+    //       body: JSON.stringify(newVote)
+    //   });
+    //   }
+    
+      async function voteUp() {
+        // const newVote = {
+        //   userId: 2,
+        //   answerId: answer.id,
+        //   value: 1
+        // }
+        // await vote(newVote);
+        // updateAnswer();
+        setRating(() => rating+1);
+      }
+    
+      async function voteDown() {
+        // const newVote = {
+        //   userId: 2,
+        //   answerId: answer.id,
+        //   value: -1
+        // }
+        // await vote(newVote);
+        // updateQuestion();
+        setRating(() => rating-1);
+      }
     return(
         <div className="answerContainer">
                <div className="answerVoteContainer">
                     <button className="voteButton">
-                      <span className="material-symbols-outlined">arrow_drop_up</span>
+                      <span className="material-symbols-outlined" onClick={voteUp}>arrow_drop_up</span>
                     </button>
-                    <div className="questRating">{answer.rating}</div>
+                    <div className="questRating">{rating}</div>
                     <button className="voteButton">
-                      <span className="material-symbols-outlined">arrow_drop_down</span>
+                      <span className="material-symbols-outlined" onClick={voteDown}>arrow_drop_down</span>
                     </button>
                   </div>
             <div className="answer">
