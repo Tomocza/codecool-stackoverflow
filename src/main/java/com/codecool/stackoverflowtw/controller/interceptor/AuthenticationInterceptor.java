@@ -16,6 +16,7 @@ import java.util.function.Predicate;
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
   private static final String SESSION_ID = "session_id";
+  private static final String USER_ID = "user_id";
   private final Set<SessionDTO> activeSessions;
   
   @Autowired
@@ -28,7 +29,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
           @NonNull Object handler) throws Exception {
     try {
       SessionDTO sessionDTO = getSessionDTO(request);
-      response.addIntHeader("user_id", sessionDTO.user_id());
+      response.addIntHeader(USER_ID, sessionDTO.user_id());
+      response.addHeader(SESSION_ID, sessionDTO.session_id());
       return true;
     } catch (Exception e) {
       return false;
