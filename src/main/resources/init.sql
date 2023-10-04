@@ -11,7 +11,7 @@ create table users
     id            serial primary key,
     username      varchar(50) unique not null,
     pw_hash       text               not null,
-    registered_at timestamp default now()
+    registered_at timestamp with time zone default now()
 );
 
 create table questions
@@ -20,8 +20,8 @@ create table questions
     title       text not null,
     body        text,
     user_id     integer references users (id),
-    created_at  timestamp default now(),
-    modified_at timestamp default now()
+    created_at  timestamp with time zone default now(),
+    modified_at timestamp with time zone default now()
 );
 
 create table question_votes
@@ -39,8 +39,8 @@ create table answers
     question_id integer references questions (id) on delete cascade,
     body        text not null,
     user_id     integer references users (id),
-    created_at  timestamp default now(),
-    modified_at timestamp default now(),
+    created_at  timestamp with time zone default now(),
+    modified_at timestamp with time zone default now(),
     accepted    boolean   default false
 );
 
