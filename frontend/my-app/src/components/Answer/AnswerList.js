@@ -24,7 +24,7 @@ function AnswerList(){
         setAnswers(answers);
       }
       fetchAnswers();
-        addAnswers();
+        // addAnswers();
       }, []);
 
 
@@ -48,9 +48,21 @@ function AnswerList(){
                   <span className="questCreatedAt">{question.createdAt}</span>
                   <span className="questUser">{question.userName}</span>
                 </div>
-                <div className='questBody'>{question.body}</div>
+                <div className="questBodyContainer">
+                  <div className="questVoteContainer">
+                    <button className="voteButton">
+                      <span class="material-symbols-outlined">arrow_drop_up</span>
+                    </button>
+                    <div className="questRating">100</div>
+                    <button className="voteButton">
+                      <span class="material-symbols-outlined">arrow_drop_down</span>
+                    </button>
+                  </div>
+                  <div className='questBody'>{question.body}</div>
+                </div>
                 {/* <button className='askQuestionButton'>Ask Question</button> */}
             </div>
+            <div className="answerCountTitle">{answers.length} Answers</div>
             {answers.map((answer) => (
                 <Answer answer={answer} key={answer.id}/>
             ))}

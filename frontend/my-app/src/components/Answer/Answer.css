@@ -22,10 +22,8 @@
   .answer{
     padding-top: 2.5vh !important;
     padding-bottom: 2.5vh !important;
-    display: grid;
-    grid-template-columns: 9vw 37vw;
-    border-top: 1px solid rgb(186, 191, 196);
-    margin-left: 2vw !important;
+    /* display: grid;
+    grid-template-columns: 7vw 37vw; */
   }
 
   .answerVotes{
@@ -59,6 +57,7 @@
   }
   
   .answerDate{
+    position: relative;
     display: block;
     /* margin-left: 0.5vw; */
     text-align: right;
@@ -66,6 +65,7 @@
     font-size: 12px;
     color: rgb(106, 115, 124);
     white-space: nowrap;
+    top: 10vh;
   }
 
   .areaLabel{
@@ -118,7 +118,57 @@
     margin-bottom: 3vh;
   }
 
+  .questBodyContainer, .answerContainer{
+    display: grid;
+    grid-template-columns: 10% 85%;
+  }
 
+  .questVoteContainer, .answerVoteContainer{
+    position: relative;
+    top:0;
+    margin-left: 3vw;
+    margin-bottom: 3vh;
+  }
+  .answerVoteContainer{
+    margin-left: 0vw;
+  }
+
+  .answerContainer{
+    padding-top: 2.5vh !important;
+    border-top: 1px solid rgb(186, 191, 196);
+    margin-left: 3vw;;
+  }
+
+  .questRating{
+   margin-left: 7px;
+    font-weight: bold;
+    margin:0.5vh;
+  }
+
+  .questBody{
+  }
+
+  .voteButton{
+    border-radius: 100px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgb(186, 191, 196);
+    background-color: white;
+  }
+  .material-symbols-outlined{
+    position: relative;
+    scale:1.4;
+    top: 2px;
+  }
+
+  .answerCountTitle{
+    margin: 2.5vh;
+    margin-left: 2.5vw;
+  }
+.voteButton:hover{
+  cursor: pointer;
+  background-color: rgb(254, 227, 205);
+}
 
 @media (max-width: 900px) {
     .answerList {
