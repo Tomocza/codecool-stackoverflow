@@ -1,15 +1,23 @@
-function DateFormatter({date}) {
-    function formatDate(date) {
+function DateFormatter({ date }) {
+    function formatDate() {
         let formattedDate = "";
-        let parsedDate = new Date(...date);
-        formattedDate += 1900 + +parsedDate.getYear();
-        formattedDate += "-" + extendToTwoDigits(parsedDate.getMonth() - 1);
-        formattedDate += "-" + extendToTwoDigits(parsedDate.getDate());
-        formattedDate += " " + extendToTwoDigits(parsedDate.getHours());
-        formattedDate += ":" + extendToTwoDigits(parsedDate.getMinutes());
-        formattedDate += ":" + extendToTwoDigits(parsedDate.getSeconds());
+        if (Array.isArray(date)) {
+            formattedDate += extendToTwoDigits(date[0]);
+            formattedDate += "-" + extendToTwoDigits(date[1]);
+            formattedDate += "-" + extendToTwoDigits(date[2]);
+            formattedDate += " " + extendToTwoDigits(date[3]);
+            formattedDate += ":" + extendToTwoDigits(date[4]);
+            formattedDate += ":" + extendToTwoDigits(date[5]);
 
-
+        } else {
+            let parsedDate = new Date(date);
+            formattedDate += 1900 + +parsedDate.getYear();
+            formattedDate += "-" + extendToTwoDigits(parsedDate.getMonth());
+            formattedDate += "-" + extendToTwoDigits(parsedDate.getDate());
+            formattedDate += " " + extendToTwoDigits(parsedDate.getHours());
+            formattedDate += ":" + extendToTwoDigits(parsedDate.getMinutes());
+            formattedDate += ":" + extendToTwoDigits(parsedDate.getSeconds());
+        }
         return formattedDate;
     }
 
@@ -22,7 +30,6 @@ function DateFormatter({date}) {
         }
         return extendedDatePart;
     }
-
     return (
         <>
             {formatDate(date ?? [0, 0, 0, 0, 0, 0])}
