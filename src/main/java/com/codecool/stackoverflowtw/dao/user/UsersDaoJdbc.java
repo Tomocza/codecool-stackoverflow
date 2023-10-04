@@ -54,24 +54,6 @@ public class UsersDaoJdbc implements UsersDAO {
   }
   
   @Override
-  public Optional<UserModel> getByName(String name) {
-    String sql = "select u.id, u.username, u.pw_hash, u.registered_at from users u where u.username = ?";
-    
-    try(Connection connection = connector.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql)) {
-      statement.setString(1, name);
-      ResultSet resultSet = statement.executeQuery();
-      
-      if (resultSet.next()){
-        return Optional.of(getUserFromResultSet(resultSet));
-      }
-    } catch(SQLException e) {
-      throw new RuntimeException(e);
-    }
-    return Optional.empty();
-  }
-  
-  @Override
   public int add(NewUserDTO newUserDTO) {
     int result = -1;
     String sql = "insert into users(username, pw_hash) values(?,?) returning(id)";
@@ -106,6 +88,24 @@ public class UsersDaoJdbc implements UsersDAO {
     }
     
     return result;
+  }
+  
+  @Override
+  public Optional<UserModel> getByName(String name) {
+    String sql = "select u.id, u.username, u.pw_hash, u.registered_at from users u where u.username = ?";
+    
+    try (Connection connection = connector.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+      statement.setString(1, name);
+      ResultSet resultSet = statement.executeQuery();
+      
+      if (resultSet.next()) {
+        return Optional.of(getUserFromResultSet(resultSet));
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    return Optional.empty();
   }
   
   private UserModel getUserFromResultSet(ResultSet resultSet) throws SQLException {

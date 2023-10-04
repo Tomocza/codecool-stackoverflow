@@ -39,26 +39,28 @@ public class AnswersDAOJdbc implements AnswersDAO {
     }
     return result;
   }
-
+  
   @Override
   public Optional<AnswerModel> getAnswerById(int answerId) {
-    String sql = "select a.id, a.question_id, a.body, a.user_id, a.created_at, a.modified_at, a.accepted, sum(av.value) as rating from answers a left join answer_votes av on a.id = av.answer_id where a.id = ? group by a.id";
-
-    try (Connection connection = connector.getConnection(); PreparedStatement pstmt = connection.prepareStatement(sql)) {
+    String sql =
+            "select a.id, a.question_id, a.body, a.user_id, a.created_at, a.modified_at, a.accepted, sum(av.value) as" +
+            " rating from answers a left join answer_votes av on a.id = av.answer_id where a.id = ? group by a.id";
+    
+    try (Connection connection = connector.getConnection();
+         PreparedStatement pstmt = connection.prepareStatement(sql)) {
       pstmt.setInt(1, answerId);
       ResultSet resultSet = pstmt.executeQuery();
-
+      
       if (resultSet.next()) {
         return Optional.of(getAnswerFromResultSet(resultSet));
       }
-    }
-    catch (SQLException e) {
+    } catch (SQLException e) {
       throw new RuntimeException(e);
     }
-
+    
     return Optional.empty();
   }
-
+  
   @Override
   public int addNewAnswer(NewAnswerDTO newAnswerDTO) {
     int result = -1;
@@ -98,8 +100,10 @@ public class AnswersDAOJdbc implements AnswersDAO {
   @Override
   public boolean addVoteToAnswer(AnswerVoteDTO answerVoteDTO) {
     boolean result = false;
-    String sql = "insert into answer_votes(answer_id, user_id, value) values(?,?,?) on conflict (answer_id, user_id) do update set value = ?";
-
+    String sql =
+            "insert into answer_votes(answer_id, user_id, value) values(?,?,?) on conflict (answer_id, user_id) do " +
+            "update set value = ?";
+    
     try (Connection conn = connector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
       pstmt.setInt(1, answerVoteDTO.answerId());
       pstmt.setInt(2, answerVoteDTO.userId());

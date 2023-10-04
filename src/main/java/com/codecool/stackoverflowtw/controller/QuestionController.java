@@ -32,24 +32,6 @@ public class QuestionController {
     return questionService.getAllQuestions();
   }
   
-  @GetMapping ("/login")
-  public HttpServletResponse getAllQuestions(@RequestBody NewUserDTO newUserDTO) {
-    BCrypt.checkpw(newUserDTO.password(), "sdf");
-    HttpServletResponse response = new Response();
-    
-    Cookie cookie = new Cookie("JWT_TOKEN", "token");
-    cookie.setMaxAge(3600);
-    cookie.setHttpOnly(true);
-    cookie.setDomain(DOMAIN);
-    response.addCookie(cookie);
-    return response;
-  }
-  
-  @GetMapping ("/authenticate")
-  public void getAllQuestions(@CookieValue ("JWT_TOKEN") Jwt jwt) {
-  
-  }
-  
   @GetMapping ("/{id}")
   public DetailedQuestionDTO getQuestionById(@PathVariable int id) {
     return questionService.getQuestionById(id).orElse(null);
@@ -64,13 +46,13 @@ public class QuestionController {
   public boolean deleteQuestionById(@PathVariable int id) {
     return questionService.deleteQuestionById(id);
   }
-
-  @PostMapping("/votes")
+  
+  @PostMapping ("/votes")
   public int addVoteToQuestion(@RequestBody QuestionVoteDTO questionVoteDTO) {
     return questionService.addVoteToQuestion(questionVoteDTO);
   }
-
-  @DeleteMapping("/votes/{qId}/{uId}")
+  
+  @DeleteMapping ("/votes/{qId}/{uId}")
   public int deleteQuestionVote(@PathVariable int qId, @PathVariable int uId) {
     return questionService.deleteQuestionVote(qId, uId);
   }

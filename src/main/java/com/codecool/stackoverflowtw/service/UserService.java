@@ -48,6 +48,10 @@ public class UserService {
     return Optional.empty();
   }
   
+  public boolean logout(int userId) {
+  return false;
+  }
+  
   public Optional<UserDTO> getById(int id) {
     Optional<UserModel> result = usersDAO.getById(id);
     return result.map(this::transformFromUserModel);

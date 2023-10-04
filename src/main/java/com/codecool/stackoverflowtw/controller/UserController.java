@@ -16,6 +16,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping ("users")
 public class UserController {
+  private static final String DOMAIN = "localhost";
+  private static final int EXPIRY_IN_SECONDS = 3600;
   private final UserService userService;
   
   @Autowired
@@ -46,13 +48,17 @@ public class UserController {
     }
     String sessionId = sessionDTO.get().session_id();
     Cookie cookie = new Cookie("session_id", sessionId);
+    cookie.setHttpOnly(true);
+    cookie.setDomain(DOMAIN);
+    cookie.setPath("/");
+    cookie.setMaxAge(EXPIRY_IN_SECONDS);
     response.addCookie(cookie);
     return sessionDTO.get().user_id();
   }
   
   @DeleteMapping ("/logout")
-  public boolean logout() {
-    return false;
+  public boolean logout(HttpServletResponse response) {
+    return userService.logout(Integer.parseInt(response.getHeader("user_id")));
   }
   
   @DeleteMapping ("/{id}")

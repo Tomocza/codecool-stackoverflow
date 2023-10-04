@@ -101,8 +101,10 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
   @Override
   public boolean addVoteToQuestion(QuestionVoteDTO questionVoteDTO) {
     boolean result = false;
-    String sql = "insert into question_votes(question_id, user_id, value) values(?,?,?) on conflict (question_id, user_id) do update set value = ?";
-
+    String sql =
+            "insert into question_votes(question_id, user_id, value) values(?,?,?) on conflict (question_id, user_id)" +
+            " do update set value = ?";
+    
     try (Connection conn = connector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
       pstmt.setInt(1, questionVoteDTO.questionId());
       pstmt.setInt(2, questionVoteDTO.userId());

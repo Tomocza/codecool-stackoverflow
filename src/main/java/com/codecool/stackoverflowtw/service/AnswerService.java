@@ -43,7 +43,7 @@ public class AnswerService {
   public boolean deleteAnswerById(int id) {
     return answersDAO.deleteAnswerById(id);
   }
-
+  
   public int addVoteToAnswer(AnswerVoteDTO answerVoteDTO) {
     int result = 0;
     if (answersDAO.addVoteToAnswer(answerVoteDTO)) {
@@ -52,7 +52,7 @@ public class AnswerService {
     }
     return result;
   }
-
+  
   public int deleteAnswerVote(int answerId, int userId) {
     int result = 0;
     if (answersDAO.deleteAnswerVote(answerId, userId)) {

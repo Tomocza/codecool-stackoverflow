@@ -54,7 +54,7 @@ public class QuestionService {
   public int addNewQuestion(NewQuestionDTO question) {
     return questionsDAO.addNewQuestion(question);
   }
-
+  
   public int addVoteToQuestion(QuestionVoteDTO questionVoteDTO) {
     int result = 0;
     if (questionsDAO.addVoteToQuestion(questionVoteDTO)) {
@@ -63,7 +63,7 @@ public class QuestionService {
     }
     return result;
   }
-
+  
   public int deleteQuestionVote(int questionId, int userId) {
     int result = 0;
     if (questionsDAO.deleteQuestionVote(questionId, userId)) {
