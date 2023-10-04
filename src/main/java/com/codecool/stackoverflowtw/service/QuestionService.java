@@ -54,12 +54,22 @@ public class QuestionService {
     return questionsDAO.addNewQuestion(question);
   }
 
-  public boolean addVoteToQuestion(QuestionVoteDTO questionVoteDTO) {
-    return questionsDAO.addVoteToQuestion(questionVoteDTO);
+  public int addVoteToQuestion(QuestionVoteDTO questionVoteDTO) {
+    int result = 0;
+    if (questionsDAO.addVoteToQuestion(questionVoteDTO)) {
+      Optional<QuestionModel> updatedQuestionData = questionsDAO.getQuestionById(questionVoteDTO.questionId());
+      result = updatedQuestionData.map(QuestionModel::rating).orElse(0);
+    }
+    return result;
   }
 
-  public boolean deleteQuestionVote(int questionId, int userId) {
-    return questionsDAO.deleteQuestionVote(questionId, userId);
+  public int deleteQuestionVote(int questionId, int userId) {
+    int result = 0;
+    if (questionsDAO.deleteQuestionVote(questionId, userId)) {
+      Optional<QuestionModel> updatedQuestionData = questionsDAO.getQuestionById(questionId);
+      result = updatedQuestionData.map(QuestionModel::rating).orElse(0);
+    }
+    return result;
   }
 
   private String getUsername(int user_id) {

@@ -41,12 +41,12 @@ public class QuestionController {
   }
 
   @PostMapping("/votes")
-  public boolean addVoteToQuestion(@RequestBody QuestionVoteDTO questionVoteDTO) {
+  public int addVoteToQuestion(@RequestBody QuestionVoteDTO questionVoteDTO) {
     return questionService.addVoteToQuestion(questionVoteDTO);
   }
 
   @DeleteMapping("/votes/{qId}/{uId}")
-  public boolean deleteQuestionVote(@PathVariable int qId, @PathVariable int uId) {
+  public int deleteQuestionVote(@PathVariable int qId, @PathVariable int uId) {
     return questionService.deleteQuestionVote(qId, uId);
   }
 }
