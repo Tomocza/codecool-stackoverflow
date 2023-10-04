@@ -1,5 +1,5 @@
 function DateFormatter({date}) {
-    function formatDate() {
+    function formatDate(date) {
         let formattedDate = "";
         let parsedDate = new Date(...date);
         formattedDate += 1900 + +parsedDate.getYear();
@@ -25,7 +25,7 @@ function DateFormatter({date}) {
 
     return (
         <>
-            {formatDate()}
+            {formatDate(date ?? [0, 0, 0, 0, 0, 0])}
         </>
     )
 }
