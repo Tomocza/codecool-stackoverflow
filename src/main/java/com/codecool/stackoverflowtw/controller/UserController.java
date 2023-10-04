@@ -18,6 +18,8 @@ import java.util.Optional;
 public class UserController {
   private static final String DOMAIN = "localhost";
   private static final int EXPIRY_IN_SECONDS = 3600;
+  private static final String SESSION_ID = "session_id";
+  private static final String DELETED = "deleted";
   private final UserService userService;
   
   @Autowired
@@ -47,22 +49,44 @@ public class UserController {
       return -1;
     }
     String sessionId = sessionDTO.get().session_id();
-    Cookie cookie = new Cookie("session_id", sessionId);
-    cookie.setHttpOnly(true);
-    cookie.setDomain(DOMAIN);
-    cookie.setPath("/");
-    cookie.setMaxAge(EXPIRY_IN_SECONDS);
+    Cookie cookie = generateCookie(sessionId);
     response.addCookie(cookie);
     return sessionDTO.get().user_id();
   }
   
   @DeleteMapping ("/logout")
   public boolean logout(HttpServletResponse response) {
-    return userService.logout(Integer.parseInt(response.getHeader("user_id")));
+    SessionDTO sessionDTO = getSessionDTO(response);
+    Cookie cookie = generateDeletedCookie();
+    response.addCookie(cookie);
+    return userService.logout(sessionDTO);
   }
   
   @DeleteMapping ("/{id}")
   public boolean deleteUserById(@PathVariable int id) {
     return userService.deleteById(id);
+  }
+  
+  private Cookie generateCookie(String sessionId) {
+    Cookie cookie = new Cookie(SESSION_ID, sessionId);
+    cookie.setHttpOnly(true);
+    cookie.setDomain(DOMAIN);
+    cookie.setPath("/");
+    cookie.setMaxAge(EXPIRY_IN_SECONDS);
+    return cookie;
+  }
+  
+  private Cookie generateDeletedCookie() {
+    Cookie cookie = new Cookie(SESSION_ID, DELETED);
+    cookie.setMaxAge(0);
+    return cookie;
+  }
+  
+  private SessionDTO getSessionDTO(HttpServletResponse response) {
+    return new SessionDTO(getUserId(response), response.getHeader("session_id"));
+  }
+  
+  private int getUserId(HttpServletResponse response) {
+    return Integer.parseInt(response.getHeader("user_id"));
   }
 }
