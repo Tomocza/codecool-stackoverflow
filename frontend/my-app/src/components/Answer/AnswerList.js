@@ -52,11 +52,11 @@ function AnswerList(){
                 <div className="questBodyContainer">
                   <div className="questVoteContainer">
                     <button className="voteButton">
-                      <span class="material-symbols-outlined">arrow_drop_up</span>
+                      <span className="material-symbols-outlined">arrow_drop_up</span>
                     </button>
-                    <div className="questRating">100</div>
+                    <div className="questRating">{question?.rating}</div>
                     <button className="voteButton">
-                      <span class="material-symbols-outlined">arrow_drop_down</span>
+                      <span className="material-symbols-outlined">arrow_drop_down</span>
                     </button>
                   </div>
                   <div className='questBody'>{question.body}</div>

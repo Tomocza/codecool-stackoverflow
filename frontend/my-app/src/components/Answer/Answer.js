@@ -5,11 +5,11 @@ function Answer({answer}){
         <div className="answerContainer">
                <div className="answerVoteContainer">
                     <button className="voteButton">
-                      <span class="material-symbols-outlined">arrow_drop_up</span>
+                      <span className="material-symbols-outlined">arrow_drop_up</span>
                     </button>
-                    <div className="questRating">100</div>
+                    <div className="questRating">{answer.rating}</div>
                     <button className="voteButton">
-                      <span class="material-symbols-outlined">arrow_drop_down</span>
+                      <span className="material-symbols-outlined">arrow_drop_down</span>
                     </button>
                   </div>
             <div className="answer">
