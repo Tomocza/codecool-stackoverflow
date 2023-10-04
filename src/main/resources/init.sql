@@ -10,7 +10,7 @@ create table users
 (
     id            serial primary key,
     username      varchar(50) unique not null,
-    pw_hash       varchar(50)        not null,
+    pw_hash       TEXT        not null,
     registered_at timestamp default now()
 );
 
