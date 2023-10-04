@@ -48,8 +48,8 @@ public class UserService {
     return Optional.empty();
   }
   
-  public boolean logout(int userId) {
-  return false;
+  public boolean logout(SessionDTO sessionDTO) {
+    return activeSessions.remove(sessionDTO);
   }
   
   public Optional<UserDTO> getById(int id) {
