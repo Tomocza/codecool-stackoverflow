@@ -15,6 +15,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,7 +61,7 @@ public class StackoverflowTwApplication {
   }
   
   @Bean
-  public SecureRandom secureRandom() {
-    return new SecureRandom();
+  public SecureRandom secureRandom() throws NoSuchAlgorithmException {
+    return SecureRandom.getInstanceStrong();
   }
 }

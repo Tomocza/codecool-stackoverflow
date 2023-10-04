@@ -4,14 +4,8 @@ import com.codecool.stackoverflowtw.controller.dto.question.BriefQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.question.DetailedQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.question.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.question.QuestionVoteDTO;
-import com.codecool.stackoverflowtw.controller.dto.user.NewUserDTO;
 import com.codecool.stackoverflowtw.service.QuestionService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

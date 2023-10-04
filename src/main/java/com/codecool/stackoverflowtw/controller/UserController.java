@@ -28,12 +28,12 @@ public class UserController {
   }
   
   @GetMapping ("/all")
-  public List<UserDTO> getAllUsers() {
+  public List<UserDTO> getAll() {
     return userService.getAll();
   }
   
   @GetMapping ("/{id}")
-  public UserDTO getUserById(@PathVariable int id) {
+  public UserDTO getById(@PathVariable int id) {
     return userService.getById(id).orElse(null);
   }
   
@@ -43,8 +43,8 @@ public class UserController {
   }
   
   @PostMapping ("/login")
-  public int login(@RequestBody UserLoginDTO user, HttpServletResponse response) {
-    Optional<SessionDTO> sessionDTO = userService.login(user);
+  public int login(@RequestBody UserLoginDTO userLoginDTO, HttpServletResponse response) {
+    Optional<SessionDTO> sessionDTO = userService.login(userLoginDTO);
     if (sessionDTO.isEmpty()) {
       return -1;
     }

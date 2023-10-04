@@ -8,6 +8,7 @@ import com.codecool.stackoverflowtw.dao.user.UserModel;
 import com.codecool.stackoverflowtw.dao.user.UsersDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Service
 public class UserService {
   private static final int LOG_ROUNDS = 10;
+  private static final int SESSION_ID_LENGTH = 32;
   private final UsersDAO usersDAO;
   private final Set<SessionDTO> activeSessions;
   private final SecureRandom secureRandom;
@@ -40,8 +42,7 @@ public class UserService {
     }
     UserModel presentUser = user.get();
     if (BCrypt.checkpw(userLoginDTO.password(), presentUser.pwHash())) {
-      String sessionId = String.valueOf(secureRandom.nextInt());
-      SessionDTO sessionDTO = new SessionDTO(presentUser.id(), sessionId);
+      SessionDTO sessionDTO = new SessionDTO(presentUser.id(), generateSessionId());
       activeSessions.add(sessionDTO);
       return Optional.of(sessionDTO);
     }
@@ -66,6 +67,12 @@ public class UserService {
     String password = BCrypt.hashpw(user.password(), salt);
     NewUserDTO newUser = new NewUserDTO(user.username(), password);
     return usersDAO.add(newUser);
+  }
+  
+  private String generateSessionId() {
+    byte[] bytes = new byte[SESSION_ID_LENGTH];
+    secureRandom.nextBytes(bytes);
+    return String.copyValueOf(Hex.encode(bytes));
   }
   
   private UserDTO transformFromUserModel(UserModel model) {
