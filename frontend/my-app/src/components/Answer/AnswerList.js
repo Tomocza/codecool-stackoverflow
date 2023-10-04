@@ -23,7 +23,7 @@ function AnswerList(){
         const answers = await response.json();
         setAnswers(answers);
       }
-      // fetchAnswers();
+      fetchAnswers();
         addAnswers();
       }, []);
 
