@@ -8,7 +8,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Configuration
@@ -24,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(new AuthenticationInterceptor(activeSessions))
-            .addPathPatterns("/answers/", "/questions", "/users/logout")
+            .addPathPatterns("/answers/", "/questions/", "/users/logout")
             .excludePathPatterns("/");
   }
 }
