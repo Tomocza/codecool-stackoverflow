@@ -55,7 +55,7 @@ public class UsersDaoJdbc implements UsersDAO {
   
   @Override
   public Optional<UserModel> getByName(String name) {
-    String sql = "select u.id, u.username, u.pw_hash, u.registered from users u where u.username = ?";
+    String sql = "select u.id, u.username, u.pw_hash, u.registered_at from users u where u.username = ?";
     
     try(Connection connection = connector.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql)) {
