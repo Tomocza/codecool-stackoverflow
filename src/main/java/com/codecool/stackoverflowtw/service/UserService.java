@@ -2,6 +2,7 @@ package com.codecool.stackoverflowtw.service;
 
 import com.codecool.stackoverflowtw.controller.dto.user.NewUserDTO;
 import com.codecool.stackoverflowtw.controller.dto.user.UserDTO;
+import com.codecool.stackoverflowtw.controller.dto.user.UserLoginDTO;
 import com.codecool.stackoverflowtw.dao.user.UserModel;
 import com.codecool.stackoverflowtw.dao.user.UsersDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,25 @@ public class UserService {
     return usersDAO.getAll().stream().map(e -> new UserDTO(e.id(), e.username(), e.registeredAt())).toList();
   }
   
+  public Optional<UserDTO> login(UserLoginDTO userLoginDTO){
+    Optional<UserModel> user = usersDAO.getByName(userLoginDTO.username());
+    if (user.isEmpty()){
+      return Optional.empty();
+    }
+    UserModel presentUser = user.get();
+    if (BCrypt.checkpw(userLoginDTO.pwd(), presentUser.pwHash())){
+      return Optional.of(transformFromUserModel(presentUser));
+    }
+    return Optional.empty();
+  }
+  
+  private UserDTO transformFromUserModel(UserModel model){
+    return new UserDTO(model.id(), model.username(), model.registeredAt());
+  }
+  
   public Optional<UserDTO> getById(int id) {
     Optional<UserModel> result = usersDAO.getById(id);
-    return result.map(userModel -> new UserDTO(userModel.id(), userModel.username(), userModel.registeredAt()));
+    return result.map(this::transformFromUserModel);
   }
   
   public boolean deleteById(int id) {
