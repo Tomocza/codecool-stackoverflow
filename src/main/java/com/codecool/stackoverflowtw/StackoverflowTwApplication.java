@@ -9,6 +9,8 @@ import com.codecool.stackoverflowtw.dao.question.QuestionsDAO;
 import com.codecool.stackoverflowtw.dao.question.QuestionsDaoJdbc;
 import com.codecool.stackoverflowtw.dao.user.UsersDAO;
 import com.codecool.stackoverflowtw.dao.user.UsersDaoJdbc;
+import com.codecool.stackoverflowtw.service.automat.AutomaticExecution;
+import com.codecool.stackoverflowtw.service.automat.AutomaticExecutionImpl;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -17,11 +19,16 @@ import org.springframework.context.annotation.Bean;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @SpringBootApplication
 public class StackoverflowTwApplication {
+  public static final int SESSION_EXPIRY_IN_SECONDS = 3600;
+  
   public static void main(String[] args) {
     SpringApplication.run(StackoverflowTwApplication.class, args);
   }
@@ -56,12 +63,31 @@ public class StackoverflowTwApplication {
   }
   
   @Bean
-  public Set<SessionDTO> activeSessions() {
-    return new HashSet<>();
+  public List<SessionDTO> activeSessions() {
+    return new ArrayList<>();
   }
   
   @Bean
   public SecureRandom secureRandom() throws NoSuchAlgorithmException {
     return SecureRandom.getInstanceStrong();
+  }
+  
+  @Bean
+  public AutomaticExecution automaticExecution(List<SessionDTO> activeSessions) {
+    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    AutomaticExecution automaticExecution = new AutomaticExecutionImpl(scheduler);
+    automaticExecution.execute(() -> deleteExpiredSessions(activeSessions));
+    return automaticExecution;
+  }
+  
+  private void deleteExpiredSessions(List<SessionDTO> activeSessions) {
+    while (!activeSessions.isEmpty() && isFirstElementOldEnough(activeSessions)) {
+      activeSessions.remove(0);
+    }
+  }
+  
+  private boolean isFirstElementOldEnough(List<SessionDTO> activeSessions) {
+    LocalDateTime beginningOfValidStart = LocalDateTime.now().minusSeconds(SESSION_EXPIRY_IN_SECONDS);
+    return activeSessions.get(0).time_of_creation().isBefore(beginningOfValidStart);
   }
 }

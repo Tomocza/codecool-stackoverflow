@@ -1,10 +1,12 @@
 package com.codecool.stackoverflowtw.controller;
 
+import com.codecool.stackoverflowtw.StackoverflowTwApplication;
 import com.codecool.stackoverflowtw.controller.dto.user.NewUserDTO;
 import com.codecool.stackoverflowtw.controller.dto.user.SessionDTO;
 import com.codecool.stackoverflowtw.controller.dto.user.UserDTO;
 import com.codecool.stackoverflowtw.controller.dto.user.UserLoginDTO;
 import com.codecool.stackoverflowtw.service.UserService;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping ("users")
 public class UserController {
-  private static final String DOMAIN = "localhost";
-  private static final int EXPIRY_IN_SECONDS = 3600;
   private static final String SESSION_ID = "session_id";
   private static final String DELETED = "deleted";
   private final UserService userService;
@@ -77,9 +77,10 @@ public class UserController {
   private Cookie generateCookie(String sessionId) {
     Cookie cookie = new Cookie(SESSION_ID, sessionId);
     cookie.setHttpOnly(true);
-    cookie.setDomain(DOMAIN);
+    Dotenv dotenv = Dotenv.load();
+    cookie.setDomain(dotenv.get("DB_HOST"));
     cookie.setPath("/");
-    cookie.setMaxAge(EXPIRY_IN_SECONDS);
+    cookie.setMaxAge(StackoverflowTwApplication.SESSION_EXPIRY_IN_SECONDS);
     return cookie;
   }
   

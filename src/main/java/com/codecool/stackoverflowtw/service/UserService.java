@@ -14,18 +14,17 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserService {
   private static final int LOG_ROUNDS = 10;
   private static final int SESSION_ID_LENGTH = 32;
   private final UsersDAO usersDAO;
-  private final Set<SessionDTO> activeSessions;
+  private final List<SessionDTO> activeSessions;
   private final SecureRandom secureRandom;
   
   @Autowired
-  public UserService(UsersDAO usersDAO, Set<SessionDTO> activeSessions, SecureRandom secureRandom) {
+  public UserService(UsersDAO usersDAO, List<SessionDTO> activeSessions, SecureRandom secureRandom) {
     this.usersDAO = usersDAO;
     this.activeSessions = activeSessions;
     this.secureRandom = secureRandom;

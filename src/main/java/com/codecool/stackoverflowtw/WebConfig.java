@@ -8,15 +8,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Set;
+import java.util.List;
 
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
-  private final Set<SessionDTO> activeSessions;
+  private final List<SessionDTO> activeSessions;
   
   @Autowired
-  public WebConfig(Set<SessionDTO> activeSessions) {
+  public WebConfig(List<SessionDTO> activeSessions) {
     this.activeSessions = activeSessions;
   }
   
