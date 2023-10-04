@@ -62,11 +62,22 @@ public class UserService {
     return usersDAO.deleteById(id);
   }
   
-  public int register(NewUserDTO user) {
+  public Optional<SessionDTO> register(NewUserDTO user) {
+    String password = generateHashedPassword(user);
+    
+    NewUserDTO newUserDTO = new NewUserDTO(user.username(), password);
+    int id = usersDAO.add(newUserDTO);
+    if (id < 0) {
+      return Optional.empty();
+    }
+    
+    UserLoginDTO userLoginDTO = new UserLoginDTO(user.username(), user.password());
+    return login(userLoginDTO);
+  }
+  
+  private String generateHashedPassword(NewUserDTO user) {
     String salt = BCrypt.gensalt(LOG_ROUNDS, new SecureRandom());
-    String password = BCrypt.hashpw(user.password(), salt);
-    NewUserDTO newUser = new NewUserDTO(user.username(), password);
-    return usersDAO.add(newUser);
+    return BCrypt.hashpw(user.password(), salt);
   }
   
   private String generateSessionId() {
