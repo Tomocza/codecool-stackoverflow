@@ -34,7 +34,7 @@ public class UserService {
     return usersDAO.deleteById(id);
   }
   
-  public int add(NewUserDTO user) {
+  public int register(NewUserDTO user) {
     String salt = BCrypt.gensalt(10, new SecureRandom());
     String password = BCrypt.hashpw(user.password(), salt);
     NewUserDTO newUser = new NewUserDTO(user.username(), password);

@@ -29,8 +29,8 @@ public class UserController {
   }
   
   @PostMapping ("/")
-  public int addNewUser(@RequestBody NewUserDTO user) {
-    return userService.add(user);
+  public int register(@RequestBody NewUserDTO user) {
+    return userService.register(user);
   }
   
   @DeleteMapping ("/{id}")
