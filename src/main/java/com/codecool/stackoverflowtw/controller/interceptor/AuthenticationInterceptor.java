@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -21,7 +20,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
   
   @Autowired
   public AuthenticationInterceptor(Set<SessionDTO> activeSessions) {
-    this.activeSessions = new HashSet<>(activeSessions);
+    this.activeSessions = activeSessions;
   }
   
   @Override
