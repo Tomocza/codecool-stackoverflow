@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import Answer from "./Answer.js";
 import "./Answer.css";
+import DateFormatter from '../Utilities/DateFormatter.js';
 
 function AnswerList(){
     const [answers, setAnswers] = useState([]);
@@ -45,7 +46,7 @@ function AnswerList(){
             <div>
                 <h2 className="questionTitle">{question.title}</h2>
                 <div className="questContainer">
-                  <span className="questCreatedAt">{question.createdAt}</span>
+                  <span className="questCreatedAt"><DateFormatter date={question.createdAt}/></span>
                   <span className="questUser">{question.userName}</span>
                 </div>
                 <div className="questBodyContainer">

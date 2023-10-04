@@ -1,3 +1,4 @@
+import DateFormatter from "../Utilities/DateFormatter";
 import "./Answer.css"
 function Answer({answer}){
     return(
@@ -17,7 +18,7 @@ function Answer({answer}){
                 </div> */}
                 <div className="answerTextContainer">
                     <div className="answerText">{answer.body}</div>
-                    <span className="answerDate"><span className="answerUser">{answer.userName}</span> {answer.createdAt}</span>
+                    <span className="answerDate"><span className="answerUser">{answer.userName}</span> <DateFormatter date={answer.createdAt}/></span>
                 </div>
             </div>
         </div>
