@@ -36,9 +36,8 @@ public class UserController {
   }
   
   @PostMapping("/login")
-  public UserDTO loginUser(@RequestBody UserLoginDTO user){
-    Optional<UserDTO> userDTO = userService.login(user);
-    return userDTO.orElse(null);
+  public int loginUser(@RequestBody UserLoginDTO user){
+    return userService.login(user);
   }
   
   @DeleteMapping ("/{id}")
