@@ -1,0 +1,126 @@
+body{
+    font-family: 'Open Sans', sans-serif;
+    
+  }
+
+.background{
+    background-color: rgb(248,249,249);
+}
+
+.questBody{
+    margin: 5vh;
+    font-size: 14px;
+}
+  
+.questionForm{
+    margin: 0 auto;
+    /* margin-top: 8vh; */
+    text-align: left;
+    border: 1px rgb(227, 230, 232) solid;
+    width: 50%;
+    /* height: 85vh; */
+    padding-top: 12vh;
+    line-height: 1.4;
+  }
+
+ .questionForm h2 {
+    color: rgb(40, 43, 47);
+    margin-left: 2vw;
+    margin-top: -0.5vh;
+    margin-bottom: 8vh;
+    font-weight: normal;
+  }
+
+  .questionForm{
+    padding-top: 12vh;
+    border-style: none !important;
+  }
+
+  .titleContainer, .bodyContainer{
+    background-color: white;
+    border: 1px solid rgb(227, 230, 232);
+    border-radius: 5px;
+    margin-bottom: 2vh;
+  }
+
+  .titleContainer > div, .bodyContainer > div{
+    padding: 3vh;
+  }
+  .titleContainer input{
+    font-size: 12px;
+    margin-top: 1vh;
+    width: 99%;
+    border: 1px solid rgb(186, 191, 196);
+    border-radius: 5px;
+    color:rgb(82, 89, 96);
+    padding: 5px;
+
+  }
+
+  .titleContainer input:focus {
+    outline: none;
+    border-color: rgb(107, 187, 247);
+    box-shadow: 0 0 0 4px rgb(217, 234, 247);
+  }
+
+  .titleContainer input::placeholder{
+    color: rgb(186, 191, 196);
+  }
+
+  .bodyContainer button{
+    font-size: 12px;
+    margin-top: 2vh;
+    /* margin-bottom: 2vh; */
+    color: white;
+     background-color: rgb(10, 149, 255);
+    border-radius: 5px;
+    /* font-family: 'Open Sans', sans-serif; */
+    padding: 0.5rem 0.5rem;
+     border: none;
+  }
+
+  .titleContainer{
+    width: 100%;
+  }
+  
+.bodyContainer button:hover{
+    cursor: pointer;
+    background-color: rgb(0, 116, 204) !important;
+  }
+
+.bodyContainer textarea{
+    font-size: 12px;
+    margin-top: 1vh;
+    height: 20vh;
+    width: 99%;
+    border: 1px solid rgb(186, 191, 196);
+    border-radius: 5px;
+    color:rgb(82, 89, 96);
+    padding: 5px;
+  }
+
+ .bodyContainer textarea:focus {
+    outline: none;
+    border-color: rgb(107, 187, 247);
+    box-shadow: 0 0 0 4px rgb(217, 234, 247);
+  }
+
+  @media (max-width: 900px) {
+    .questionForm {
+    width: 100%;
+    border: none;    
+  }  
+}
+
+@media (max-width: 600px){
+
+  .questionForm{
+    margin-top: 4vh;
+  }
+}
+
+@media (max-height: 600px){
+  .questionForm{
+    margin-top: 40px;
+  }
+}
