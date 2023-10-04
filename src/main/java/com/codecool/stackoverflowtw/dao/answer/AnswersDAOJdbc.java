@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AnswersDAOJdbc implements AnswersDAO {
   private final JdbcConnector connector;
@@ -35,6 +36,25 @@ public class AnswersDAOJdbc implements AnswersDAO {
       throw new RuntimeException(e);
     }
     return result;
+  }
+
+  @Override
+  public Optional<AnswerModel> getAnswerById(int answerId) {
+    String sql = "select a.id, a.question_id, a.body, a.user_id, a.created_at, a.modified_at, a.accepted, sum(av.value) as rating from answers a left join answer_votes av on a.id = av.answer_id where a.id = ? group by a.id";
+
+    try (Connection connection = connector.getConnection(); PreparedStatement pstmt = connection.prepareStatement(sql)) {
+      pstmt.setInt(1, answerId);
+      ResultSet resultSet = pstmt.executeQuery();
+
+      if (resultSet.next()) {
+        return Optional.of(getAnswerFromResultSet(resultSet));
+      }
+    }
+    catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+
+    return Optional.empty();
   }
 
   @Override

@@ -35,12 +35,12 @@ public class AnswerController {
   }
 
   @PostMapping("/votes")
-  public boolean addVoteToAnswer(@RequestBody AnswerVoteDTO answerVoteDTO) {
+  public int addVoteToAnswer(@RequestBody AnswerVoteDTO answerVoteDTO) {
     return answerService.addVoteToAnswer(answerVoteDTO);
   }
 
   @DeleteMapping("/votes/{aId}/{uId}")
-  public boolean deleteAnswerVote(@PathVariable int aId, @PathVariable int uId) {
+  public int deleteAnswerVote(@PathVariable int aId, @PathVariable int uId) {
     return answerService.deleteAnswerVote(aId, uId);
   }
 }
