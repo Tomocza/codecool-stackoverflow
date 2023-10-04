@@ -21,7 +21,6 @@ public class UserController {
   private static final String SESSION_ID = "session_id";
   private static final String DELETED = "deleted";
   private final UserService userService;
-  
   @Autowired
   public UserController(UserService userService) {
     this.userService = userService;
@@ -48,7 +47,6 @@ public class UserController {
     response.addCookie(cookie);
     return sessionDTO.get().user_id();
   }
-  
   @PostMapping ("/login")
   public int login(@RequestBody UserLoginDTO userLoginDTO, HttpServletResponse response) {
     Optional<SessionDTO> sessionDTO = userService.login(userLoginDTO);

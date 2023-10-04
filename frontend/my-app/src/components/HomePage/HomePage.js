@@ -6,7 +6,9 @@ function HomePage(){
             <div className="homePageOptions">
                 <div className="option1">
                     <div className="description">Find the best answer to your technical question, help others answer theirs</div>
-                    <button className="option1Button">Join the Community</button>
+                    <Link to="register">
+                        <button className="option1Button">Join the Community</button>
+                    </Link>
                 </div>
                 <div className="option2">
                     <div className="description">Browse the biggest collection of tech related questions</div>

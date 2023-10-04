@@ -54,6 +54,10 @@
     border-radius: 20px;
   }
 
+  .loginForm{
+    margin: 3vh;
+  }
+
   .buttonLogin{
     background-color: rgb(225, 236, 244) !important;
     border-radius: 5px !important;

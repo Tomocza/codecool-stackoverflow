@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import '../Login/Login.css';
+import logoImg from "../Layout/stack-icon.svg";
 
 export default function UserNamePasswordForm({ submitText, onSubmit, disabled }) {
   const [username, setUsername] = useState("");
@@ -8,17 +10,22 @@ export default function UserNamePasswordForm({ submitText, onSubmit, disabled })
     onSubmit(username, pwd);
   }
   return (
-    <form className="loginForm" onSubmit={handleSubmit}>
-      <div>
-        <h2>Log in!</h2>
-        <label htmlFor="username">Username:</label>
-        <input type="text" id="username" name="username" onChange={(e) => setUsername(e.target.value)} />
-        <label htmlFor="pwd">Password:</label>
-        <input type="password" id="pwd" name="pwd" onChange={(e) => setPwd(e.target.value)} />
-        <button type="submit" disabled={disabled}>
-          {submitText}
-        </button>
+    <div>
+      <img className="loginLogo" src={logoImg}></img>
+      <div className="loginContainer">
+      <form className="loginForm" onSubmit={handleSubmit}>
+        <div>
+          {/* <h2>Log in!</h2> */}
+          <label htmlFor="username">Username:</label><br/>
+          <input type="text" id="username" name="username" onChange={(e) => setUsername(e.target.value)} /><br/>
+          <label htmlFor="pwd">Password:</label><br/>
+          <input type="password" id="pwd" name="pwd" onChange={(e) => setPwd(e.target.value)} /><br/>
+          <button type="submit" disabled={disabled}>
+            {submitText}
+          </button>
+        </div>
+      </form>
       </div>
-    </form>
+    </div>
   );
 }
