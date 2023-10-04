@@ -23,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(new AuthenticationInterceptor(activeSessions))
-            .addPathPatterns("/answers/", "/questions/", "/users/logout")
+            .addPathPatterns("/answers/", "/answers/votes", "/questions/", "/questions/votes", "/users/logout")
             .excludePathPatterns("/");
   }
 }
