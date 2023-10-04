@@ -41,7 +41,7 @@ public class QuestionService {
     return result.map(questionModel -> new DetailedQuestionDTO(questionModel.id(),
                                                                questionModel.title(),
                                                                questionModel.body(),
-                                                               0,
+                                                               questionModel.rating(),
                                                                getUsername(questionModel.user_id()),
                                                                questionModel.createdAt()));
   }

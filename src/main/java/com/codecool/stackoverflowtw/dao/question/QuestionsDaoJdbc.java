@@ -20,7 +20,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
   @Override
   public List<QuestionModel> getAllQuestions() {
     List<QuestionModel> result = new ArrayList<>();
-    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(a.id) as answer_count from " + "questions q left join public.answers a on q.id = a.question_id group by q.id";
+    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(a.id) as answer_count, sum(qv.value) as rating from questions q left join answers a on q.id = a.question_id left join question_votes qv on q.id = qv.question_id group by q.id";
 
     try (Connection connection = connector.getConnection(); Statement statement = connection.createStatement()) {
       ResultSet resultSet = statement.executeQuery(sql);
@@ -38,7 +38,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
   @Override
   public Optional<QuestionModel> getQuestionById(int id) {
-    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(a.id) as answer_count from " + "questions q left join public.answers a on q.id = a.question_id where q.id = ? group by q.id";
+    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(a.id) as answer_count, sum(qv.value) as rating from questions q left join answers a on q.id = a.question_id left join question_votes qv on q.id = qv.question_id where q.id = ? group by q.id";
 
     try (Connection connection = connector.getConnection(); PreparedStatement statement = connection.prepareStatement(
             sql)) {
@@ -139,6 +139,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     LocalDateTime createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
     LocalDateTime modifiedAt = resultSet.getTimestamp("modified_at").toLocalDateTime();
     int answerCount = resultSet.getInt("answer_count");
-    return new QuestionModel(id, title, body, userId, createdAt, modifiedAt, answerCount);
+    int rating = resultSet.getInt("rating");
+    return new QuestionModel(id, title, body, userId, createdAt, modifiedAt, answerCount, rating);
   }
 }

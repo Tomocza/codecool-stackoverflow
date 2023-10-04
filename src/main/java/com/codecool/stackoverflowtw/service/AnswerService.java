@@ -25,7 +25,12 @@ public class AnswerService {
   public List<AnswerDTO> getAnswersByQuestionId(int questionId) {
     return answersDAO.getAnswersByQuestionId(questionId)
                      .stream()
-                     .map(e -> new AnswerDTO(e.id(), e.body(), getUsername(e.userId()), e.createdAt(), e.accepted()))
+                     .map(e -> new AnswerDTO(e.id(),
+                                             e.body(),
+                                             getUsername(e.userId()),
+                                             e.createdAt(),
+                                             e.accepted(),
+                                             e.rating()))
                      .toList();
   }
 
