@@ -32,7 +32,8 @@ public class QuestionService {
                                                       e.title(),
                                                       e.createdAt(),
                                                       getUsername(e.user_id()),
-                                                      e.answerCount()))
+                                                      e.answerCount(),
+                                                      e.rating()))
                        .toList();
   }
 
