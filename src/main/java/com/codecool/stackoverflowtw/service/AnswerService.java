@@ -15,13 +15,13 @@ import java.util.List;
 public class AnswerService {
   private final AnswersDAO answersDAO;
   private final UsersDAO usersDAO;
-
+  
   @Autowired
   public AnswerService(AnswersDAO answersDAO, UsersDAO usersDAO) {
     this.answersDAO = answersDAO;
     this.usersDAO = usersDAO;
   }
-
+  
   public List<AnswerDTO> getAnswersByQuestionId(int questionId) {
     return answersDAO.getAnswersByQuestionId(questionId)
                      .stream()
@@ -33,23 +33,23 @@ public class AnswerService {
                                              e.rating()))
                      .toList();
   }
-
+  
   public int addNewAnswer(NewAnswerDTO newAnswerDTO) {
     return answersDAO.addNewAnswer(newAnswerDTO);
   }
-
+  
   public boolean deleteAnswerById(int id) {
     return answersDAO.deleteAnswerById(id);
   }
-
+  
   public boolean addVoteToAnswer(AnswerVoteDTO answerVoteDTO) {
     return answersDAO.addVoteToAnswer(answerVoteDTO);
   }
-
+  
   public boolean deleteAnswerVote(int answerId, int userId) {
     return answersDAO.deleteAnswerVote(answerId, userId);
   }
-
+  
   private String getUsername(int user_id) {
     return usersDAO.getById(user_id).orElseGet(() -> new UserModel(0, "anonymous", "", null)).username();
   }

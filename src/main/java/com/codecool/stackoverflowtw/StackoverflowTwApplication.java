@@ -1,5 +1,6 @@
 package com.codecool.stackoverflowtw;
 
+import com.codecool.stackoverflowtw.controller.dto.user.SessionDTO;
 import com.codecool.stackoverflowtw.dao.answer.AnswersDAO;
 import com.codecool.stackoverflowtw.dao.answer.AnswersDAOJdbc;
 import com.codecool.stackoverflowtw.dao.connection.JdbcConnector;
@@ -13,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @SpringBootApplication
 public class StackoverflowTwApplication {
@@ -47,5 +51,10 @@ public class StackoverflowTwApplication {
   @Autowired
   public UsersDAO usersDAO(JdbcConnector connector) {
     return new UsersDaoJdbc(connector);
+  }
+  
+  @Bean
+  public Set<SessionDTO> activeSessions() {
+    return new HashSet<>();
   }
 }
