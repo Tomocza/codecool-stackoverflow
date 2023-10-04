@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AnswersDAOJdbc implements AnswersDAO {
   private final JdbcConnector connector;
@@ -38,7 +39,26 @@ public class AnswersDAOJdbc implements AnswersDAO {
     }
     return result;
   }
-  
+
+  @Override
+  public Optional<AnswerModel> getAnswerById(int answerId) {
+    String sql = "select a.id, a.question_id, a.body, a.user_id, a.created_at, a.modified_at, a.accepted, sum(av.value) as rating from answers a left join answer_votes av on a.id = av.answer_id where a.id = ? group by a.id";
+
+    try (Connection connection = connector.getConnection(); PreparedStatement pstmt = connection.prepareStatement(sql)) {
+      pstmt.setInt(1, answerId);
+      ResultSet resultSet = pstmt.executeQuery();
+
+      if (resultSet.next()) {
+        return Optional.of(getAnswerFromResultSet(resultSet));
+      }
+    }
+    catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+
+    return Optional.empty();
+  }
+
   @Override
   public int addNewAnswer(NewAnswerDTO newAnswerDTO) {
     int result = -1;
@@ -78,12 +98,13 @@ public class AnswersDAOJdbc implements AnswersDAO {
   @Override
   public boolean addVoteToAnswer(AnswerVoteDTO answerVoteDTO) {
     boolean result = false;
-    String sql = "insert into answer_votes(answer_id, user_id, value) values(?,?,?)";
-    
+    String sql = "insert into answer_votes(answer_id, user_id, value) values(?,?,?) on conflict (answer_id, user_id) do update set value = ?";
+
     try (Connection conn = connector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
       pstmt.setInt(1, answerVoteDTO.answerId());
       pstmt.setInt(2, answerVoteDTO.userId());
       pstmt.setInt(3, answerVoteDTO.value());
+      pstmt.setInt(4, answerVoteDTO.value());
       result = pstmt.executeUpdate() > 0;
     } catch (SQLException e) {
       throw new RuntimeException(e);

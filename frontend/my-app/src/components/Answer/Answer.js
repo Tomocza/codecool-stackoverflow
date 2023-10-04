@@ -1,14 +1,15 @@
+import DateFormatter from "../Utilities/DateFormatter";
 import "./Answer.css"
 function Answer({answer}){
     return(
         <div className="answerContainer">
                <div className="answerVoteContainer">
                     <button className="voteButton">
-                      <span class="material-symbols-outlined">arrow_drop_up</span>
+                      <span className="material-symbols-outlined">arrow_drop_up</span>
                     </button>
-                    <div className="questRating">100</div>
+                    <div className="questRating">{answer.rating}</div>
                     <button className="voteButton">
-                      <span class="material-symbols-outlined">arrow_drop_down</span>
+                      <span className="material-symbols-outlined">arrow_drop_down</span>
                     </button>
                   </div>
             <div className="answer">
@@ -17,7 +18,7 @@ function Answer({answer}){
                 </div> */}
                 <div className="answerTextContainer">
                     <div className="answerText">{answer.body}</div>
-                    <span className="answerDate"><span className="answerUser">{answer.userName}</span> {answer.createdAt}</span>
+                    <span className="answerDate"><span className="answerUser">{answer.userName}</span> <DateFormatter date={answer.createdAt}/></span>
                 </div>
             </div>
         </div>
