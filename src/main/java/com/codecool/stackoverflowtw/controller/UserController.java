@@ -1,9 +1,12 @@
 package com.codecool.stackoverflowtw.controller;
 
 import com.codecool.stackoverflowtw.controller.dto.user.NewUserDTO;
+import com.codecool.stackoverflowtw.controller.dto.user.SessionDTO;
 import com.codecool.stackoverflowtw.controller.dto.user.UserDTO;
 import com.codecool.stackoverflowtw.controller.dto.user.UserLoginDTO;
 import com.codecool.stackoverflowtw.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,9 +39,20 @@ public class UserController {
   }
   
   @PostMapping ("/login")
-  public UserDTO loginUser(@RequestBody UserLoginDTO user) {
-    Optional<UserDTO> userDTO = userService.login(user);
-    return userDTO.orElse(null);
+  public int login(@RequestBody UserLoginDTO user, HttpServletResponse response) {
+    Optional<SessionDTO> sessionDTO = userService.login(user);
+    if (sessionDTO.isEmpty()) {
+      return -1;
+    }
+    String sessionId = sessionDTO.get().session_id();
+    Cookie cookie = new Cookie("session_id", sessionId);
+    response.addCookie(cookie);
+    return sessionDTO.get().user_id();
+  }
+  
+  @DeleteMapping ("/logout")
+  public boolean logout() {
+    return false;
   }
   
   @DeleteMapping ("/{id}")
