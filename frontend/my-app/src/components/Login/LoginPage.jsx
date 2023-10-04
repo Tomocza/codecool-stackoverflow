@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import UserNamePasswordForm from "../UsernamePasswordForm/UserNamePasswordForm";
 
 export default function LoginPage() {
-  const SUBMITTEXT = "Login";
+  const SUBMIT_TEXT = "Login";
   const [loginLoading, setLoginLoading] = useState(false);
 
   async function login(username, password) {
@@ -23,5 +23,5 @@ export default function LoginPage() {
       setLoginLoading(false);
     }
   }
-  return <UserNamePasswordForm onSubmit={login} submitText={SUBMITTEXT} disabled={loginLoading} />;
+  return <UserNamePasswordForm onSubmit={login} submitText={SUBMIT_TEXT} disabled={loginLoading} />;
 }

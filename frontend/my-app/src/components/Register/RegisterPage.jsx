@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import UserNamePasswordForm from "../UsernamePasswordForm/UserNamePasswordForm";
 
 export default function RegisterPage() {
-  const SUBMITTEXT = "Register";
+  const SUBMIT_TEXT = "Register";
   const [registerLoading, setRegisterLoading] = useState(false);
 
   async function register(username, password) {
@@ -23,5 +23,5 @@ export default function RegisterPage() {
       setRegisterLoading(false);
     }
   }
-  return <UserNamePasswordForm onSubmit={register} submitText={SUBMITTEXT} disabled={registerLoading} />;
+  return <UserNamePasswordForm onSubmit={register} submitText={SUBMIT_TEXT} disabled={registerLoading} />;
 }
