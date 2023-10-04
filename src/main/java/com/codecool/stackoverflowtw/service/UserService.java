@@ -26,20 +26,16 @@ public class UserService {
     return usersDAO.getAll().stream().map(e -> new UserDTO(e.id(), e.username(), e.registeredAt())).toList();
   }
   
-  public Optional<UserDTO> login(UserLoginDTO userLoginDTO){
+  public Optional<UserDTO> login(UserLoginDTO userLoginDTO) {
     Optional<UserModel> user = usersDAO.getByName(userLoginDTO.username());
-    if (user.isEmpty()){
+    if (user.isEmpty()) {
       return Optional.empty();
     }
     UserModel presentUser = user.get();
-    if (BCrypt.checkpw(userLoginDTO.pwd(), presentUser.pwHash())){
+    if (BCrypt.checkpw(userLoginDTO.pwd(), presentUser.pwHash())) {
       return Optional.of(transformFromUserModel(presentUser));
     }
     return Optional.empty();
-  }
-  
-  private UserDTO transformFromUserModel(UserModel model){
-    return new UserDTO(model.id(), model.username(), model.registeredAt());
   }
   
   public Optional<UserDTO> getById(int id) {
@@ -56,5 +52,9 @@ public class UserService {
     String password = BCrypt.hashpw(user.password(), salt);
     NewUserDTO newUser = new NewUserDTO(user.username(), password);
     return usersDAO.add(newUser);
+  }
+  
+  private UserDTO transformFromUserModel(UserModel model) {
+    return new UserDTO(model.id(), model.username(), model.registeredAt());
   }
 }

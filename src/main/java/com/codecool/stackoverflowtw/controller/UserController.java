@@ -35,8 +35,8 @@ public class UserController {
     return userService.register(user);
   }
   
-  @PostMapping("/login")
-  public UserDTO loginUser(@RequestBody UserLoginDTO user){
+  @PostMapping ("/login")
+  public UserDTO loginUser(@RequestBody UserLoginDTO user) {
     Optional<UserDTO> userDTO = userService.login(user);
     return userDTO.orElse(null);
   }

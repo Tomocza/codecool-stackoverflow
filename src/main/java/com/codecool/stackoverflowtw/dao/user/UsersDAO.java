@@ -1,7 +1,6 @@
 package com.codecool.stackoverflowtw.dao.user;
 
 import com.codecool.stackoverflowtw.controller.dto.user.NewUserDTO;
-import org.apache.tomcat.util.http.parser.Cookie;
 
 import java.util.List;
 import java.util.Optional;

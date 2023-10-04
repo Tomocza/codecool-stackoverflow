@@ -18,13 +18,13 @@ public class WebConfig implements WebMvcConfigurer {
   
   @Autowired
   public WebConfig(Set<SessionDTO> activeSessions) {
-    this.activeSessions = new HashSet<>(activeSessions);
+    this.activeSessions = activeSessions;
   }
   
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(new AuthenticationInterceptor(activeSessions))
-            .addPathPatterns("/**")
-            .excludePathPatterns("/users/login", "/users", "/hello", "/");
+            .addPathPatterns("/answers/", "/questions", "/users/logout")
+            .excludePathPatterns("/");
   }
 }
