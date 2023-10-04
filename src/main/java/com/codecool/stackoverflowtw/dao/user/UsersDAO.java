@@ -1,6 +1,7 @@
 package com.codecool.stackoverflowtw.dao.user;
 
 import com.codecool.stackoverflowtw.controller.dto.user.NewUserDTO;
+import org.apache.tomcat.util.http.parser.Cookie;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,4 +11,5 @@ public interface UsersDAO {
   Optional<UserModel> getById(int id);
   int add(NewUserDTO newUserDTO);
   boolean deleteById(int id);
+  Optional<UserModel> getByName(String name);
 }
