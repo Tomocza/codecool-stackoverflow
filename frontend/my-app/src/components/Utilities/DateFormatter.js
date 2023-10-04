@@ -2,7 +2,6 @@ function DateFormatter({ date }) {
     function formatDate() {
         let formattedDate = "";
         if (Array.isArray(date)) {
-
             formattedDate += extendToTwoDigits(date[0]);
             formattedDate += "-" + extendToTwoDigits(date[1]);
             formattedDate += "-" + extendToTwoDigits(date[2]);
@@ -19,8 +18,6 @@ function DateFormatter({ date }) {
             formattedDate += ":" + extendToTwoDigits(parsedDate.getMinutes());
             formattedDate += ":" + extendToTwoDigits(parsedDate.getSeconds());
         }
-        //     console.log(date);
-
         return formattedDate;
     }
 
@@ -35,8 +32,9 @@ function DateFormatter({ date }) {
     }
     return (
         <>
-            {formatDate()}
+            {formatDate(date ?? [0, 0, 0, 0, 0, 0])}
         </>
     )
 }
+
 export default DateFormatter;
