@@ -1,32 +1,33 @@
-function DateFormatter({date}){
-    function formatDate(){
+function DateFormatter({date}) {
+    function formatDate() {
         let formattedDate = "";
-        let parsedDate = new Date(date);
+        let parsedDate = new Date(Date.UTC(...date));
         formattedDate += 1900 + +parsedDate.getYear();
-        formattedDate += "-" + extendToTwoDigits(parsedDate.getMonth());
+        formattedDate += "-" + extendToTwoDigits(parsedDate.getMonth() - 1);
         formattedDate += "-" + extendToTwoDigits(parsedDate.getDate());
         formattedDate += " " + extendToTwoDigits(parsedDate.getHours());
         formattedDate += ":" + extendToTwoDigits(parsedDate.getMinutes());
         formattedDate += ":" + extendToTwoDigits(parsedDate.getSeconds());
 
 
-
         return formattedDate;
     }
 
-    function extendToTwoDigits(datePart){
+    function extendToTwoDigits(datePart) {
         let extendedDatePart = "";
-        if (datePart.toString().length === 1){
+        if (datePart.toString().length === 1) {
             extendedDatePart += "0" + datePart;
         } else {
             extendedDatePart += datePart;
         }
         return extendedDatePart;
     }
-    return(
+
+    return (
         <>
             {formatDate()}
         </>
     )
 }
+
 export default DateFormatter;
