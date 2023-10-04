@@ -18,13 +18,13 @@ import java.util.Optional;
 public class QuestionService {
   private final QuestionsDAO questionsDAO;
   private final UsersDAO usersDAO;
-
+  
   @Autowired
   public QuestionService(QuestionsDAO questionsDAO, UsersDAO usersDAO) {
     this.questionsDAO = questionsDAO;
     this.usersDAO = usersDAO;
   }
-
+  
   public List<BriefQuestionDTO> getAllQuestions() {
     return questionsDAO.getAllQuestions()
                        .stream()
@@ -32,10 +32,11 @@ public class QuestionService {
                                                       e.title(),
                                                       e.createdAt(),
                                                       getUsername(e.user_id()),
-                                                      e.answerCount()))
+                                                      e.answerCount(),
+                                                      e.rating()))
                        .toList();
   }
-
+  
   public Optional<DetailedQuestionDTO> getQuestionById(int id) {
     Optional<QuestionModel> result = questionsDAO.getQuestionById(id);
     return result.map(questionModel -> new DetailedQuestionDTO(questionModel.id(),
@@ -45,23 +46,33 @@ public class QuestionService {
                                                                getUsername(questionModel.user_id()),
                                                                questionModel.createdAt()));
   }
-
+  
   public boolean deleteQuestionById(int id) {
     return questionsDAO.deleteQuestionById(id);
   }
-
+  
   public int addNewQuestion(NewQuestionDTO question) {
     return questionsDAO.addNewQuestion(question);
   }
 
-  public boolean addVoteToQuestion(QuestionVoteDTO questionVoteDTO) {
-    return questionsDAO.addVoteToQuestion(questionVoteDTO);
+  public int addVoteToQuestion(QuestionVoteDTO questionVoteDTO) {
+    int result = 0;
+    if (questionsDAO.addVoteToQuestion(questionVoteDTO)) {
+      Optional<QuestionModel> updatedQuestionData = questionsDAO.getQuestionById(questionVoteDTO.questionId());
+      result = updatedQuestionData.map(QuestionModel::rating).orElse(0);
+    }
+    return result;
   }
 
-  public boolean deleteQuestionVote(int questionId, int userId) {
-    return questionsDAO.deleteQuestionVote(questionId, userId);
+  public int deleteQuestionVote(int questionId, int userId) {
+    int result = 0;
+    if (questionsDAO.deleteQuestionVote(questionId, userId)) {
+      Optional<QuestionModel> updatedQuestionData = questionsDAO.getQuestionById(questionId);
+      result = updatedQuestionData.map(QuestionModel::rating).orElse(0);
+    }
+    return result;
   }
-
+  
   private String getUsername(int user_id) {
     return usersDAO.getById(user_id).orElseGet(() -> new UserModel(0, "anonymous", "", null)).username();
   }
