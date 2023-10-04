@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom';
 import "../../App.css"
+import DateFormatter from '../Utilities/DateFormatter';
 function Question({question}){
     return(
         <div className="question">
@@ -11,7 +12,7 @@ function Question({question}){
                 <Link to={`/answers/${question.id}`}>
                     <div className="questionText">{question.title}</div>
                 </Link>
-                <span className="questionDate"><span className="questionUser">{question.userName}</span> {question.createdAt}</span>
+                <span className="questionDate"><span className="questionUser">{question.userName}</span> <DateFormatter date={question.createdAt}/></span>
             </div>
         </div>
     ) 
