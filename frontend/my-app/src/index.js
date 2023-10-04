@@ -9,6 +9,8 @@ import QuestionForm from "./components/Question/QuestionForm";
 
 import "./index.css";
 import AnswerList from "./components/Answer/AnswerList";
+import LoginPage from "./components/Login/LoginPage";
+import RegisterPage from "./components/Register/RegisterPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -30,7 +32,15 @@ const router = createBrowserRouter([
       {
         path: "/question/ask",
         element: <QuestionForm />,
-      }
+      },
+      {
+        path: "/login",
+        element: <LoginPage />,
+      },
+      {
+        path: "/register",
+        element: <RegisterPage />,
+      },
     ],
   },
 ]);

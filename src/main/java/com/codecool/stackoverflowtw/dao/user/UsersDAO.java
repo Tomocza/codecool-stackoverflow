@@ -10,4 +10,5 @@ public interface UsersDAO {
   Optional<UserModel> getById(int id);
   int add(NewUserDTO newUserDTO);
   boolean deleteById(int id);
+  Optional<UserModel> getByName(String name);
 }
