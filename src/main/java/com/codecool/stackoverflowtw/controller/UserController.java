@@ -73,6 +73,10 @@ public class UserController {
   public boolean deleteUserById(@PathVariable int id) {
     return userService.deleteById(id);
   }
+  @GetMapping("/session")
+  public int userIdBySession(@CookieValue String session_id){
+    return userService.hasValidSession(session_id);
+  }
   
   private Cookie generateCookie(String sessionId) {
     Cookie cookie = new Cookie(SESSION_ID, sessionId);
@@ -86,7 +90,11 @@ public class UserController {
   
   private Cookie generateDeletedCookie() {
     Cookie cookie = new Cookie(SESSION_ID, DELETED);
-    cookie.setMaxAge(StackoverflowTwApplication.SESSION_EXPIRY_IN_SECONDS);
+    cookie.setHttpOnly(true);
+    Dotenv dotenv = Dotenv.load();
+    cookie.setDomain(dotenv.get("DB_HOST"));
+    cookie.setPath("/");
+    cookie.setMaxAge(1);
     return cookie;
   }
   
