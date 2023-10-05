@@ -39,14 +39,7 @@ public class UserController {
   
   @PostMapping ("/")
   public int register(@RequestBody NewUserDTO user, HttpServletResponse response) {
-    Optional<SessionDTO> sessionDTO = userService.register(user);
-    if (sessionDTO.isEmpty()) {
-      return -1;
-    }
-    String sessionId = sessionDTO.get().session_id();
-    Cookie cookie = generateCookie(sessionId);
-    response.addCookie(cookie);
-    return sessionDTO.get().user_id();
+    return userService.register(user);
   }
   
   @PostMapping ("/login")
@@ -78,7 +71,7 @@ public class UserController {
     Cookie cookie = new Cookie(SESSION_ID, sessionId);
     cookie.setHttpOnly(true);
     Dotenv dotenv = Dotenv.load();
-    cookie.setDomain(dotenv.get("DB_HOST"));
+    cookie.setDomain(dotenv.get("DOMAIN_NAME"));
     cookie.setPath("/");
     cookie.setMaxAge(StackoverflowTwApplication.SESSION_EXPIRY_IN_SECONDS);
     return cookie;
