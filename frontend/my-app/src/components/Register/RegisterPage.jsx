@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import UserNamePasswordForm from "../UsernamePasswordForm/UserNamePasswordForm";
 import '../Login/Login.css';
 
 export default function RegisterPage() {
   const SUBMIT_TEXT = "Register";
   const [registerLoading, setRegisterLoading] = useState(false);
+  const [userId, setUserId] = useOutletContext();
   const navigate = useNavigate();
 
   
@@ -48,6 +49,7 @@ export default function RegisterPage() {
       });
       const user = await httpRawRes.json();
       console.log(user);
+      setUserId(user);
       navigate('/questions');
     } catch (error) {
       return console.error(error);
