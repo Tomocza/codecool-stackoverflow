@@ -3,6 +3,7 @@ import React, { createContext } from "react";
 import "./NavBar.css";
 import logoImg from "./stack-icon.svg";
 import { useEffect, useState } from "react";
+import { BACKEND_ROOT } from '../../constants';
 
 export const QuestionContext = createContext("");
 function NavBar() {
@@ -15,7 +16,7 @@ function NavBar() {
     try {
       setLoading(true);
       async function getUser() {
-        const httpRawRes = await fetch(`/users/session`);
+        const httpRawRes = await fetch(`${BACKEND_ROOT}/users/session`);
         const res = await httpRawRes.json();
         if (Number.isInteger(res) && res != -1){
           setUserId(res);
@@ -36,7 +37,7 @@ function NavBar() {
   async function logout() {
     setLoading(true);
     try {
-      const httpRawRes = await fetch("/users/logout", {
+      const httpRawRes = await fetch(`${BACKEND_ROOT}/users/logout`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

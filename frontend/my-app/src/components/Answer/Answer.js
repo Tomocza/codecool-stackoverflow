@@ -4,6 +4,8 @@ import DateFormatter from "../Utilities/DateFormatter";
 import "./Answer.css"
 function Answer({currentAnswer}){
     const [answer, setAnswer] = useState(currentAnswer);
+import { BACKEND_ROOT } from '../../constants';
+function Answer({answer}){
     const [rating, setRating] = useState(answer.rating);
     const [loading, setLoading] = useState(false);
     const [userId, setUserId] = useOutletContext();
@@ -22,14 +24,14 @@ function Answer({currentAnswer}){
   //     console.error(error);
   //   } finally{
   //     setLoading(false);
-  //   }  
-      
+  //   }
+
   //   }
 
     async function vote(newVote){
         try{
           setLoading(true);
-          const response = await fetch('/answers/votes',{
+          const response = await fetch(`${BACKEND_ROOT}/answers/votes`,{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(newVote)
@@ -81,6 +83,7 @@ function Answer({currentAnswer}){
           }
         } else {
           navigate("/register");
+
         }
       }
     
