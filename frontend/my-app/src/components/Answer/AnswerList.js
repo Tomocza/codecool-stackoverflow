@@ -3,6 +3,7 @@ import { useParams, useNavigate, useOutletContext } from 'react-router-dom';
 import Answer from "./Answer.js";
 import "./Answer.css";
 import DateFormatter from '../Utilities/DateFormatter.js';
+import { BACKEND_ROOT } from '../../constants';
 
 function AnswerList() {
   const [answers, setAnswers] = useState([]);
@@ -18,7 +19,7 @@ function AnswerList() {
       setLoading(true);
       const currentId = userId ?? -1;
       async function fetchQuestions() {
-        const response = await fetch(`/questions/${id}/${currentId}`);
+        const response = await fetch(`${BACKEND_ROOT}/questions/${id}/${currentId}`);
         const newQuestion = await response.json();
         setQuestion(newQuestion);
       }
@@ -35,7 +36,7 @@ useEffect(() => {
     setLoading(true);
     const currentId = userId ?? -1;
     async function fetchAnswers() {
-      const response = await fetch(`/answers/question/${id}/${currentId}`);
+      const response = await fetch(`${BACKEND_ROOT}/answers/question/${id}/${currentId}`);
       const answers = await response.json();
       setAnswers(answers);
     }
@@ -55,7 +56,7 @@ async function refreshAnswers() {
   try{
     setLoading(true);
     const currentId = userId ?? -1;
-    const response = await fetch(`/answers/question/${id}/${currentId}`);
+    const response = await fetch(`${BACKEND_ROOT}/answers/question/${id}/${currentId}`);
     const answers = await response.json();
     setAnswers(answers);
   } catch(error){
@@ -73,7 +74,7 @@ async function submitAnswer() {
     }
     try{
       setLoading(true);
-      const response = await fetch(`/answers/`, {
+      const response = await fetch(`${BACKEND_ROOT}/answers/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newAnswer)
@@ -104,7 +105,7 @@ async function updateQuestion() {
   try{
     const currentId = userId ?? -1;
     setLoading(true);
-    const response = await fetch(`/questions/${question.id}/${userId}`);
+    const response = await fetch(`${BACKEND_ROOT}/questions/${question.id}/${userId}`);
     const newQuestion = await response.json();
     setQuestion(newQuestion);
   } catch(error){
@@ -117,7 +118,7 @@ async function updateQuestion() {
 async function vote(newVote) {
   try{
     setLoading(true);
-    const response = await fetch('/questions/votes', {
+    const response = await fetch(`${BACKEND_ROOT}/questions/votes`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newVote)

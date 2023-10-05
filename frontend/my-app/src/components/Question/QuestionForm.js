@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Navigate, useOutletContext } from 'react-router-dom';
 import "./QuestionForm.css";
+import { BACKEND_ROOT } from '../../constants';
 function QuestionForm(){
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
@@ -28,7 +29,7 @@ function QuestionForm(){
             body: body,
             userId: userId
         }
-        const response = await fetch('/questions/',{
+        const response = await fetch(`${BACKEND_ROOT}/questions/`,{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(newPost)

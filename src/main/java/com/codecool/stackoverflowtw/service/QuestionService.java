@@ -24,7 +24,18 @@ public class QuestionService {
     this.questionsDAO = questionsDAO;
     this.usersDAO = usersDAO;
   }
-
+  
+  public List<BriefQuestionDTO> getQuestionsByName(String name){
+    return questionsDAO.getQuestionByName(name).stream()
+                       .map(e -> new BriefQuestionDTO(e.id(),
+                                                      e.title(),
+                                                      e.createdAt(),
+                                                      getUsername(e.user_id()),
+                                                      e.answerCount(),
+                                                      e.rating()))
+                       .toList();
+  }
+  
   public List<BriefQuestionDTO> getAllQuestions() {
     return questionsDAO.getAllQuestions()
                        .stream()

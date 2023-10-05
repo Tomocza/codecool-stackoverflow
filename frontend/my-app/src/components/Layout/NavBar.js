@@ -1,18 +1,22 @@
 import { Outlet, Link, useNavigate, useOutletContext } from "react-router-dom";
+import React, { createContext } from "react";
 import "./NavBar.css";
 import logoImg from "./stack-icon.svg";
 import { useEffect, useState } from "react";
+import { BACKEND_ROOT } from '../../constants';
 
+export const QuestionContext = createContext("");
 function NavBar() {
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
+  const [searcher, setSearcher] = useState("");
 
   useEffect(() => {
     try {
       setLoading(true);
       async function getUser() {
-        const httpRawRes = await fetch(`/users/session`);
+        const httpRawRes = await fetch(`${BACKEND_ROOT}/users/session`);
         const res = await httpRawRes.json();
         if (Number.isInteger(res) && res != -1){
           setUserId(res);
@@ -33,7 +37,7 @@ function NavBar() {
   async function logout() {
     setLoading(true);
     try {
-      const httpRawRes = await fetch("/users/logout", {
+      const httpRawRes = await fetch(`${BACKEND_ROOT}/users/logout`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -49,7 +53,10 @@ function NavBar() {
     }
   }
 
-
+  function changeQuery(message) {
+    setSearcher(message);
+    navigate("/questions");
+  }
   return (
     <div className="navbar">
       <nav>
@@ -70,7 +77,12 @@ function NavBar() {
             </Link>
           </li>
           <li>
-            <input type="text" placeholder="Search"></input>
+            <input
+              value={searcher}
+              type="text"
+              placeholder="Search"
+              onChange={(e) => changeQuery(e.target.value)}
+            ></input>
           </li>
           {userId == null ?
             <>
@@ -97,7 +109,9 @@ function NavBar() {
           }
         </ul>
       </nav>
-      <Outlet context={[userId, setUserId]} />
+      <QuestionContext.Provider value={searcher}>
+        <Outlet context={[userId, setUserId]} />
+      </QuestionContext.Provider>
     </div>
   );
 }

@@ -26,11 +26,20 @@ public class QuestionController {
   public List<BriefQuestionDTO> getAllQuestions() {
     return questionService.getAllQuestions();
   }
+  @GetMapping("/search/{title}")
+  public List<BriefQuestionDTO> getQuestionsByName(@PathVariable String title){
+    return questionService.getQuestionsByName(title);
+  }
 
   @GetMapping("/{qId}/{uId}")
   public DetailedQuestionDTO getQuestionById(@PathVariable int qId, @PathVariable int uId) {
     return questionService.getQuestionById(qId, uId).orElse(null);
   }
+  
+  // @GetMapping ("/{id}")
+  // public DetailedQuestionDTO getQuestionById(@PathVariable int id) {
+  //   return questionService.getQuestionById(id).orElse(null);
+  // }
 
   @PostMapping("/")
   public int addNewQuestion(@RequestBody NewQuestionDTO question, HttpServletResponse response) {
@@ -39,12 +48,6 @@ public class QuestionController {
     }
     return questionService.addNewQuestion(question);
   }
-
-  @DeleteMapping("/{id}")
-  public boolean deleteQuestionById(@PathVariable int id) {
-    return questionService.deleteQuestionById(id);
-  }
-
   @PostMapping("/votes")
   public int addVoteToQuestion(@RequestBody QuestionVoteDTO questionVoteDTO, HttpServletResponse response) {
     if (questionVoteDTO.userId() != getUserId(response)) {
@@ -52,6 +55,13 @@ public class QuestionController {
     }
     return questionService.addVoteToQuestion(questionVoteDTO);
   }
+
+  @DeleteMapping("/{id}")
+  public boolean deleteQuestionById(@PathVariable int id) {
+    return questionService.deleteQuestionById(id);
+  }
+
+  
 
   @DeleteMapping("/votes/{qId}/{uId}")
   public int deleteQuestionVote(@PathVariable int qId, @PathVariable int uId, HttpServletResponse response) {
