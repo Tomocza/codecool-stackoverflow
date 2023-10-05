@@ -1,14 +1,21 @@
-import {Link} from 'react-router-dom';
+import {Link, useOutletContext} from 'react-router-dom';
+import { useState } from 'react';
 import "./HomePage.css";
 function HomePage(){
+    const [userId, setUserID] = useOutletContext();
     return (
         <div className="homePage">
             <div className="homePageOptions">
                 <div className="option1">
                     <div className="description">Find the best answer to your technical question, help others answer theirs</div>
-                    <Link to="register">
+                    {userId == null
+                    ? <Link to="register">
                         <button className="option1Button">Join the Community</button>
                     </Link>
+                    : <Link to="questions">
+                    <button className="option1Button">Join the Community</button>
+                    </Link>
+                    }
                 </div>
                 <div className="option2">
                     <div className="description">Browse the biggest collection of tech related questions</div>

@@ -1,8 +1,34 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate, useOutletContext } from "react-router-dom";
 import "./NavBar.css";
 import logoImg from "./stack-icon.svg";
+import { useState } from "react";
 
 function NavBar() {
+  const [loading, setLoading] = useState();
+  const navigate = useNavigate();
+  const [userId, setUserId] = useState(null);
+
+  async function logout(){   
+    setLoading(true);
+    try {
+      const httpRawRes = await fetch("/users/logout", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // const res = await httpRawRes.json();
+      // console.log(res);
+      setUserId(null);
+      navigate("/login");
+    } catch (error) {
+      return console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
   return (
     <div className="navbar">
       <nav>
@@ -22,12 +48,11 @@ function NavBar() {
               <button type="button">Questions</button>
             </Link>
           </li>
-          {/* <li>
-        <button type="button">Products</button>
-        </li> */}
           <li>
             <input type="text" placeholder="Search"></input>
           </li>
+          {userId == null ?
+          <>
           <li>
             <Link to="/login">
               <button type="button" className="buttonLogin">
@@ -42,9 +67,16 @@ function NavBar() {
               </button>
             </Link>
           </li>
+          </>
+          : <li>
+              <button type="button" className="buttonLogin" onClick={logout}>
+                Logout
+              </button>
+          </li>
+          }
         </ul>
       </nav>
-      <Outlet />
+      <Outlet context={[userId, setUserId]} />
     </div>
   );
 }
