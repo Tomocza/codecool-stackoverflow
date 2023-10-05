@@ -10,16 +10,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Arrays;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
   private static final String SESSION_ID = "session_id";
-  private final Set<SessionDTO> activeSessions;
+  private static final String USER_ID = "user_id";
+  private final List<SessionDTO> activeSessions;
   
   @Autowired
-  public AuthenticationInterceptor(Set<SessionDTO> activeSessions) {
+  public AuthenticationInterceptor(List<SessionDTO> activeSessions) {
     this.activeSessions = activeSessions;
   }
   
@@ -27,13 +28,18 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
   public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
           @NonNull Object handler) throws Exception {
     try {
-      Cookie sessionCookie = getSessionCookie(request);
-      SessionDTO sessionDTO = getSessionDTO(sessionCookie);
-      response.addIntHeader("user_id", sessionDTO.user_id());
+      SessionDTO sessionDTO = getSessionDTO(request);
+      response.addIntHeader(USER_ID, sessionDTO.user_id());
+      response.addHeader(SESSION_ID, sessionDTO.session_id());
       return true;
     } catch (Exception e) {
       return false;
     }
+  }
+  
+  private SessionDTO getSessionDTO(HttpServletRequest request) {
+    Cookie sessionCookie = getSessionCookie(request);
+    return getSessionDTO(sessionCookie);
   }
   
   private SessionDTO getSessionDTO(Cookie sessionCookie) {
