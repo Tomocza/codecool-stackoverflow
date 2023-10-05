@@ -41,7 +41,6 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
   
   @Override
   public List<QuestionModel> getQuestionByName(String name) {
-    System.out.println(name);
     List<QuestionModel> result = new ArrayList<>();
     String sql = "SELECT q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, " +
                  "COUNT(a.id) AS answer_count, SUM(qv.value) AS rating " +
