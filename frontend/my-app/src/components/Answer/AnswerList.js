@@ -6,7 +6,7 @@ import DateFormatter from '../Utilities/DateFormatter.js';
 
 function AnswerList() {
   const [answers, setAnswers] = useState([]);
-  const [question, setQuestion] = useState("");
+  const [question, setQuestion] = useState({});
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useOutletContext();
@@ -104,12 +104,41 @@ async function updateQuestion() {
   try{
     const currentId = userId ?? -1;
     setLoading(true);
-    const response = await fetch(`/questions/${question.id}/${userId}`);
+    const response = await fetch(`/questions/${question.id}/${currentId}`);
     const newQuestion = await response.json();
-    setQuestion(newQuestion);
+    setQuestion(() => newQuestion);
   } catch(error){
     console.error(error);
   } finally{
+    setLoading(false);
+  }
+}
+
+// async function vote(newVote) {
+//   try{
+//     setLoading(true);
+//     const response = await fetch('/questions/votes', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify(newVote)
+//     });
+//   } catch(error){
+//     console.error(error);
+//   } finally {
+//     setLoading(false);
+//   }
+// }
+
+async function deleteVote(newVote) {
+  try{
+    setLoading(true);
+    const response = await fetch(`/questions/votes/${question.id}/${userId}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      });
+  } catch(error){
+    console.error(error);
+  } finally {
     setLoading(false);
   }
 }
@@ -129,14 +158,23 @@ async function vote(newVote) {
   }
 }
 
+
 async function voteUp() {
   if (userId != null){
-    const newVote = {
-      userId: userId,
-      questionId: question.id,
-      value: 1
+    if (question.hasVoted != 1){
+      question.hasVoted = 1;
+      setQuestion(() => question);
+      const newVote = {
+        userId: userId,
+        questionId: question.id,
+        value: 1
+      }
+      await vote(newVote);
+    } else {
+      question.hasVoted = 0;
+      setQuestion(() => question);
+      deleteVote();
     }
-    await vote(newVote);
     updateQuestion();
   } else {
     navigate("/register");
@@ -145,12 +183,20 @@ async function voteUp() {
 
 async function voteDown() {
   if (userId != null){
-    const newVote = {
-      userId: userId,
-      questionId: question.id,
-      value: -1
+    if (question.hasVoted != -1){
+      question.hasVoted = -1;
+      setQuestion(() => question);
+      const newVote = {
+        userId: userId,
+        questionId: question.id,
+        value: -1
+      }
+      await vote(newVote);
+    }else {
+      question.hasVoted = 0;
+      setQuestion(() => question);
+      deleteVote();
     }
-    await vote(newVote);
     updateQuestion();
   } else {
     navigate("/register");
@@ -159,6 +205,7 @@ async function voteDown() {
 
 return (
   <div className="answerList">
+    {/* {console.log(question)} */}
     <div>
       <h2 className="questionTitle">{question.title}</h2>
       <div className="questContainer">
@@ -167,11 +214,11 @@ return (
       </div>
       <div className="questBodyContainer">
         <div className="questVoteContainer">
-          <button className="voteButton" onClick={voteUp} disabled={loading}>
+          <button className={`voteButton ${question.hasVoted == 1 ? "upVoted" : ""}`} onClick={voteUp} disabled={loading}>
             <span className="material-symbols-outlined">arrow_drop_up</span>
           </button>
           <div className="questRating">{question?.rating}</div>
-          <button className="voteButton" onClick={voteDown} disabled={loading}>
+          <button className={`voteButton ${question.hasVoted == -1 ? "downVoted" : ""}`} onClick={voteDown} disabled={loading}>
             <span className="material-symbols-outlined">arrow_drop_down</span>
           </button>
         </div>
@@ -180,7 +227,7 @@ return (
     </div>
     <div className="answerCountTitle">{answers.length} Answers</div>
     {answers.map((answer) => (
-      <Answer answer={answer} key={answer.id} />
+      <Answer currentAnswer={answer} key={answer.id} />
     ))}
     <div className='areaLabel'>Your Answer</div>
     <textarea onChange={(e) => getBody(e)}></textarea>

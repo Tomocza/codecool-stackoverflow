@@ -2,12 +2,30 @@ import { useState } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import DateFormatter from "../Utilities/DateFormatter";
 import "./Answer.css"
-function Answer({answer}){
+function Answer({currentAnswer}){
+    const [answer, setAnswer] = useState(currentAnswer);
     const [rating, setRating] = useState(answer.rating);
     const [loading, setLoading] = useState(false);
     const [userId, setUserId] = useOutletContext();
+
     const navigate = useNavigate();
       
+
+  // async function refreshAnswer(){
+  //   try{
+  //     setLoading(true)
+  //     const response = await fetch(`/answers/${answer.id}`);
+  //   const newAnswer = await response.json();
+  //   setAnswer(() => newAnswer);
+  //   setRating(() => newAnswer.rating);
+  //   } catch(error) {
+  //     console.error(error);
+  //   } finally{
+  //     setLoading(false);
+  //   }  
+      
+  //   }
+
     async function vote(newVote){
         try{
           setLoading(true);
@@ -18,6 +36,25 @@ function Answer({answer}){
         });
         const newRating = await response.json();
         setRating(() => newRating);
+        // await refreshAnswer();
+        console.log(newRating);
+        } catch(error) {
+          console.error(error);
+        } finally{
+          setLoading(false);
+        }
+      }
+
+      async function deleteVote(answerId){
+        try{
+          setLoading(true);
+          const response = await fetch(`/answers/votes/${answerId}/${userId}`,{
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'}
+        });
+        const newRating = await response.json();
+        setRating(() => newRating);
+        // await refreshAnswer();
         console.log(newRating);
         } catch(error) {
           console.error(error);
@@ -28,39 +65,54 @@ function Answer({answer}){
     
       async function voteUp() {
         if (userId != null){
-          const newVote = {
-            userId: userId,
-            answerId: answer.id,
-            value: 1
+          if (answer.hasVoted != 1){
+            answer.hasVoted = 1;
+            setAnswer(() => answer);
+            const newVote = {
+              userId: userId,
+              answerId: answer.id,
+              value: 1
+            }
+            await vote(newVote);
+          } else {
+            answer.hasVoted = 0;
+            setAnswer(() => answer);
+            await deleteVote(answer.id);
           }
-          await vote(newVote);
-        } else{
+        } else {
           navigate("/register");
-
         }
       }
     
       async function voteDown() {
         if (userId != null){
-          const newVote = {
-            userId: userId,
-            answerId: answer.id,
-            value: -1
+          if (answer.hasVoted != -1){
+            answer.hasVoted = -1;
+            setAnswer(() => answer);
+            const newVote = {
+              userId: userId,
+              answerId: answer.id,
+              value: -1
+            }
+            await vote(newVote);
+          } else {
+            answer.hasVoted = 0;
+            setAnswer(() => answer);
+            await deleteVote(answer.id);
           }
-          await vote(newVote);
         } else {
           navigate("/register");
         }
       }
     return(
         <div className="answerContainer">
-          {console.log(answer)}
+          {/* {console.log(answer)} */}
                <div className="answerVoteContainer">
-                    <button className="voteButton" disabled={loading}>
-                      <span className="material-symbols-outlined" onClick={voteUp}>arrow_drop_up</span>
+                    <button className={`voteButton  ${answer.hasVoted == 1 ? "upVoted" : ""}`} disabled={loading}>
+                      <span className="material-symbols-outlined" onClick={voteUp} >arrow_drop_up</span>
                     </button>
                     <div className="questRating">{rating}</div>
-                    <button className="voteButton" disabled={loading}>
+                    <button className={`voteButton  ${answer.hasVoted == -1 ? "downVoted" : ""}`} disabled={loading}>
                       <span className="material-symbols-outlined" onClick={voteDown}>arrow_drop_down</span>
                     </button>
                   </div>

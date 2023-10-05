@@ -9,6 +9,14 @@
   font-family: 'Open Sans', sans-serif;
 }
 
+.upVoted{
+  background-color: rgb(205, 233, 254) !important;
+}
+
+.downVoted{
+  background-color: rgb(251, 200, 200)  !important;
+}
+
 .answerList h2 {
   color: rgb(40, 43, 47);
   margin-left: 2vw;
@@ -195,7 +203,7 @@
 
 .voteButton:hover {
   cursor: pointer;
-  background-color: rgb(254, 227, 205);
+  background-color: rgb(254, 227, 205) !important;
 }
 
 @media (max-width: 900px) {
