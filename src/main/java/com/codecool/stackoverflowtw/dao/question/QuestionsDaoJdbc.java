@@ -41,17 +41,12 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
   }
   
   @Override
-  public List<QuestionModel> getQuestionByName(String name) {
+  public List<QuestionModel> getQuestionByName(String name) { // not finished, need the query
     List<QuestionModel> result = new ArrayList<>();
-    String sql = "SELECT q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, " +
-                 "COUNT(a.id) AS answer_count, SUM(qv.value) AS rating " +
-                 "FROM questions q " +
-                 "LEFT JOIN answers a ON q.id = a.question_id " +
-                 "LEFT JOIN question_votes qv ON q.id = qv.question_id " +
-                 "WHERE q.title ILIKE '%'|| ? || '%'" +
-                 "GROUP BY q.id";
+    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(distinct a.id) as answer_count, coalesce(qv.rating, 0) as rating, coalesce(vc.vote_count, 0) = 1 as has_voted from questions q left join answers a on q.id = a.question_id left join (select question_id, sum(value) as rating from question_votes group by question_id) qv on q.id = qv.question_id left join (select question_id, count(*) as vote_count from question_votes where user_id = ? and q.title ilike '%'||?||'%' group by question_id)vc on q.id = vc.question_id group by q.id, qv.rating, vc.vote_count";;
     try(Connection connection = connector.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
-        statement.setString(1, name);
+      statement.setInt(1, -1);
+      statement.setString(2, name);
         ResultSet resultSet = statement.executeQuery();
         
         while (resultSet.next()){

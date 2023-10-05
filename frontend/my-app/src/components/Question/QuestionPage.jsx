@@ -25,5 +25,5 @@ export default function QuestionPage() {
       setLoading(false);
     }
   }, [questionContext]);
-  return <QuestionList questions={questions} loading={loading} />;
+  if (questions.length > 0) return <QuestionList questions={questions} loading={loading} />;
 }
