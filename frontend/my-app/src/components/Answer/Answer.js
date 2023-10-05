@@ -3,16 +3,24 @@ import DateFormatter from "../Utilities/DateFormatter";
 import "./Answer.css"
 function Answer({answer}){
     const [rating, setRating] = useState(answer.rating);
- 
-      async function vote(newVote){
-        const response = await fetch('/answers/votes',{
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(newVote)
-      });
-      const newRating = await response.json();
-      setRating(() => newRating);
-      console.log(newRating);
+    const [loading, setLoading] = useState(false);
+      
+    async function vote(newVote){
+        try{
+          setLoading(true);
+          const response = await fetch('/answers/votes',{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(newVote)
+        });
+        const newRating = await response.json();
+        setRating(() => newRating);
+        console.log(newRating);
+        } catch(error) {
+          console.error(error);
+        } finally{
+          setLoading(false);
+        }
       }
     
       async function voteUp() {
@@ -35,18 +43,15 @@ function Answer({answer}){
     return(
         <div className="answerContainer">
                <div className="answerVoteContainer">
-                    <button className="voteButton">
+                    <button className="voteButton" disabled={loading}>
                       <span className="material-symbols-outlined" onClick={voteUp}>arrow_drop_up</span>
                     </button>
                     <div className="questRating">{rating}</div>
-                    <button className="voteButton">
+                    <button className="voteButton" disabled={loading}>
                       <span className="material-symbols-outlined" onClick={voteDown}>arrow_drop_down</span>
                     </button>
                   </div>
             <div className="answer">
-                {/* <div className="answerData">
-                    <div className="answerVotes">{answer?.numberOfVotes} votes</div>
-                </div> */}
                 <div className="answerTextContainer">
                     <div className="answerText">{answer.body}</div>
                     <span className="answerDate"><span className="answerUser">{answer.userName}</span> <DateFormatter date={answer.createdAt}/></span>

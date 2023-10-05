@@ -5,7 +5,6 @@ import DateFormatter from '../Utilities/DateFormatter';
 function Question({question}){
     return(
         <div className="question">
-            {/* {console.log(question)} */}
             <div className="questionData">
                 <div className="questionVotes">{question?.rating} votes</div>
                 <div className="questionAnswers">{question.answerCount} answers</div>

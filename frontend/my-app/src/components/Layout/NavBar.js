@@ -22,9 +22,6 @@ function NavBar() {
               <button type="button">Questions</button>
             </Link>
           </li>
-          {/* <li>
-        <button type="button">Products</button>
-        </li> */}
           <li>
             <input type="text" placeholder="Search"></input>
           </li>

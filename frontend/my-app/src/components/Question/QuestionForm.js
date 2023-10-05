@@ -33,8 +33,6 @@ function QuestionForm(){
             body: JSON.stringify(newPost)
         });
         navigate('/questions');
-        // setBody(() => "");
-        // setTitle(() => "");
       }
       function handleSubmit(){
         if (title.length >= 2 && body.length >= 5){
