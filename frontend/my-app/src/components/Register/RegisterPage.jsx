@@ -6,6 +6,7 @@ import '../Login/Login.css';
 export default function RegisterPage() {
   const SUBMIT_TEXT = "Register";
   const [registerLoading, setRegisterLoading] = useState(false);
+  const [contentError, setContentError] = useState([]);
   const navigate = useNavigate();
 
   
@@ -18,22 +19,48 @@ export default function RegisterPage() {
 
 
   async function register(username, password) {
-    setRegisterLoading(true);
-    try {
-      const httpRawRes = await fetch("/users/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-      const user = await httpRawRes.json();
-      console.log(user);
-      login(username, password);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setRegisterLoading(false);
+    const newContentError = [];
+    if (/.{1,}/.test(username)) {
+      newContentError.push("Your username should be at least 1 character long");
+    } else if (/(?![^a-zA-Z\d]).{1,}/.test(username)) {
+      newContentError.push("Your username should contain only alphanumeric characters");
+    }
+    if (!/[a-z]/.test(password)) {
+      newContentError.push("You should add lowercase letter to your password");
+    }
+    if (!/[A-Z]/.test(password)) {
+      newContentError.push("You should add uppercase letter to your password");
+    }
+    if (!/\d/.test(password)) {
+      newContentError.push("You should add number to your password");
+    }
+    if (!/[$&@!?.:_#*+/\\€%ß^~,;-]/.test(password)) {
+      newContentError.push("You should add a special character to your password");
+    }
+    if (!/.{8}/.test(password)) {
+      newContentError.push("Your password should be at least 8 character long");
+    }
+    if (newContentError.length > 0) {
+      setContentError(newContentError);
+    } else {
+      setContentError(newContentError);
+      setRegisterLoading(true);
+      try {
+        const httpRawRes = await fetch("/users/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        });
+        const user = await httpRawRes.json();
+        console.log(user);
+        login(username, password);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setRegisterLoading(false);
+      }
     }
   }
     
@@ -54,5 +81,5 @@ export default function RegisterPage() {
     } finally {
     }
   }
-  return <UserNamePasswordForm onSubmit={register} submitText={SUBMIT_TEXT} disabled={registerLoading} />;
+  return <UserNamePasswordForm contentError={contentError} onSubmit={register} submitText={SUBMIT_TEXT} disabled={registerLoading} />;
 }
