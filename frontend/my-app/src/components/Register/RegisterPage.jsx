@@ -55,10 +55,12 @@ export default function RegisterPage() {
           },
           body: JSON.stringify({ username, password }),
         });
-        if (httpRawRes.ok) {
+        if (httpRawRes.status === 200) {
           const user = await httpRawRes.json();
           console.log(user);
-          login(username, password);
+          if (user !== -1) {
+            login(username, password);
+          }
         } else {
           setContentError(["You should choose a different username, because it's already in use"]);
         }

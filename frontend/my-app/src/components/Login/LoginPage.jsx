@@ -28,10 +28,14 @@ export default function LoginPage() {
         body: JSON.stringify({ username, password }),
       });
       console.log("login" + httpRawRes);
-      const res = await httpRawRes.json();
-      console.log(res);
-      setUserId(res);
-      navigate("/questions");
+      if (httpRawRes.status === 200) {
+        const res = await httpRawRes.json();
+        console.log(res);
+        if (res !== -1) {
+          setUserId(res);
+          navigate("/questions");
+        }
+      }
     } catch (error) {
       return console.error(error);
     } finally {
