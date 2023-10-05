@@ -1,8 +1,10 @@
 import { Outlet, Link } from "react-router-dom";
 import "./NavBar.css";
 import logoImg from "./stack-icon.svg";
+import { useState } from "react";
 
 function NavBar() {
+  const [userId, setUserId] = useState(null);
   return (
     <div className="navbar">
       <nav>
@@ -41,7 +43,7 @@ function NavBar() {
           </li>
         </ul>
       </nav>
-      <Outlet />
+      <Outlet context={[userId, setUserId]} />
     </div>
   );
 }
