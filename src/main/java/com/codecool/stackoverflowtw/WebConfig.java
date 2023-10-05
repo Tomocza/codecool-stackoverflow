@@ -28,12 +28,14 @@ public class WebConfig implements WebMvcConfigurer {
             .addPathPatterns("/answers/", "/answers/votes/**", "/questions/", "/questions/votes/**", "/users/logout")
             .excludePathPatterns("/");
   }
+  
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     Dotenv dotenv = Dotenv.load();
     registry.addMapping("/**")
             .allowedOrigins(dotenv.get("DOMAIN_NAME"))
             .allowedMethods("PUT", "DELETE", "GET", "POST", "PATCH")
-            .allowCredentials(true).maxAge(StackoverflowTwApplication.SESSION_EXPIRY_IN_SECONDS);
+            .allowCredentials(true)
+            .maxAge(StackoverflowTwApplication.SESSION_EXPIRY_IN_SECONDS);
   }
 }

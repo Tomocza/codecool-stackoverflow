@@ -66,8 +66,9 @@ public class UserController {
   public boolean deleteUserById(@PathVariable int id) {
     return userService.deleteById(id);
   }
-  @GetMapping("/session")
-  public int userIdBySession(@CookieValue String session_id){
+  
+  @GetMapping ("/session")
+  public int userIdBySession(@CookieValue String session_id) {
     return userService.hasValidSession(session_id);
   }
   
