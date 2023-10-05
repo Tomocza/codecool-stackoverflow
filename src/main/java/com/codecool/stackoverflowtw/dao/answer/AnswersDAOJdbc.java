@@ -24,7 +24,7 @@ public class AnswersDAOJdbc implements AnswersDAO {
   @Override
   public List<AnswerModel> getAnswersByQuestionId(int questionId, int userId) {
     List<AnswerModel> result = new ArrayList<>();
-    String sql = "select a.id, a.question_id, a.body, a.user_id, a.created_at, a.modified_at, a.accepted, sum(av.value) as rating, coalesce(vc.vote_count, 0) = 1 as has_voted from answers a left join answer_votes av on a.id = av.answer_id left join (select av.answer_id, count(*) as vote_count from answer_votes av where av.user_id = ? group by av.answer_id) vc on a.id = vc.answer_id where a.question_id = ? group by a.id, has_voted";
+    String sql = "select a.id, a.question_id, a.body, a.user_id, a.created_at, a.modified_at, a.accepted, sum(av.value) as rating, coalesce(vc.vote_count, 0) = 1 as has_voted from answers a left join answer_votes av on a.id = av.answer_id left join (select av.answer_id, count(*) as vote_count from answer_votes av where av.user_id = ? group by av.answer_id) vc on a.id = vc.answer_id where a.question_id = ? group by a.id, has_voted order by rating desc ";
     try (Connection conn = connector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
       pstmt.setInt(1, userId);
       pstmt.setInt(2, questionId);
