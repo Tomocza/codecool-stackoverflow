@@ -1,10 +1,19 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import React, { createContext } from "react";
 import "./NavBar.css";
 import logoImg from "./stack-icon.svg";
 import { useState } from "react";
 
+export const QuestionContext = createContext("");
 function NavBar() {
   const [userId, setUserId] = useState(null);
+  const [searcher, setSearcher] = useState("");
+  const navigate = useNavigate();
+
+  function changeQuery(message) {
+    setSearcher(message);
+    navigate("/questions");
+  }
   return (
     <div className="navbar">
       <nav>
@@ -25,7 +34,12 @@ function NavBar() {
             </Link>
           </li>
           <li>
-            <input type="text" placeholder="Search"></input>
+            <input
+              value={searcher}
+              type="text"
+              placeholder="Search"
+              onChange={(e) => changeQuery(e.target.value)}
+            ></input>
           </li>
           <li>
             <Link to="/login">
@@ -43,7 +57,9 @@ function NavBar() {
           </li>
         </ul>
       </nav>
-      <Outlet context={[userId, setUserId]} />
+      <QuestionContext.Provider value={searcher}>
+        <Outlet context={[userId, setUserId]} />
+      </QuestionContext.Provider>
     </div>
   );
 }
