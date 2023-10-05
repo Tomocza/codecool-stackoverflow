@@ -5,6 +5,7 @@ import com.codecool.stackoverflowtw.controller.dto.question.DetailedQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.question.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.question.QuestionVoteDTO;
 import com.codecool.stackoverflowtw.service.QuestionService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,10 @@ public class QuestionController {
   }
   
   @PostMapping ("/")
-  public int addNewQuestion(@RequestBody NewQuestionDTO question) {
+  public int addNewQuestion(@RequestBody NewQuestionDTO question, HttpServletResponse response) {
+    if (question.userId() != getUserId(response)) {
+      return -1;
+    }
     return questionService.addNewQuestion(question);
   }
   
@@ -42,12 +46,22 @@ public class QuestionController {
   }
   
   @PostMapping ("/votes")
-  public int addVoteToQuestion(@RequestBody QuestionVoteDTO questionVoteDTO) {
+  public int addVoteToQuestion(@RequestBody QuestionVoteDTO questionVoteDTO, HttpServletResponse response) {
+    if (questionVoteDTO.userId() != getUserId(response)) {
+      return -1;
+    }
     return questionService.addVoteToQuestion(questionVoteDTO);
   }
   
   @DeleteMapping ("/votes/{qId}/{uId}")
-  public int deleteQuestionVote(@PathVariable int qId, @PathVariable int uId) {
+  public int deleteQuestionVote(@PathVariable int qId, @PathVariable int uId, HttpServletResponse response) {
+    if (uId != getUserId(response)) {
+      return -1;
+    }
     return questionService.deleteQuestionVote(qId, uId);
+  }
+  
+  private int getUserId(HttpServletResponse response) {
+    return Integer.parseInt(response.getHeader("user_id"));
   }
 }
