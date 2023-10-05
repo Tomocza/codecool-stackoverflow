@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import DateFormatter from "../Utilities/DateFormatter";
 import "./Answer.css"
+import { BACKEND_ROOT } from '../../constants';
 function Answer({answer}){
     const [rating, setRating] = useState(answer.rating);
     const [loading, setLoading] = useState(false);
@@ -11,7 +12,7 @@ function Answer({answer}){
     async function vote(newVote){
         try{
           setLoading(true);
-          const response = await fetch('/answers/votes',{
+          const response = await fetch(`${BACKEND_ROOT}/answers/votes`,{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(newVote)

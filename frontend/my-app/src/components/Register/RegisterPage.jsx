@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import UserNamePasswordForm from "../UsernamePasswordForm/UserNamePasswordForm";
 import '../Login/Login.css';
+import {BACKEND_ROOT} from "../../constants";
 
 export default function RegisterPage() {
   const SUBMIT_TEXT = "Register";
@@ -47,7 +48,7 @@ export default function RegisterPage() {
       setContentError(newContentError);
       setRegisterLoading(true);
       try {
-        const httpRawRes = await fetch("/users/", {
+        const httpRawRes = await fetch(`${BACKEND_ROOT}/users/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -71,7 +72,7 @@ export default function RegisterPage() {
     
   async function login(username, password) {
     try {
-      const httpRawRes = await fetch("/users/login", {
+      const httpRawRes = await fetch(`${BACKEND_ROOT}/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

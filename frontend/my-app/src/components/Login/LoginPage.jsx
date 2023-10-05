@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import "./Login.css";
 import UserNamePasswordForm from "../UsernamePasswordForm/UserNamePasswordForm";
+import { BACKEND_ROOT } from '../../constants';
 
 export default function LoginPage() {
   const SUBMIT_TEXT = "Log in";
@@ -19,7 +20,7 @@ export default function LoginPage() {
   async function login(username, password) {
     setLoginLoading(true);
     try {
-      const httpRawRes = await fetch("/users/login", {
+      const httpRawRes = await fetch(`${BACKEND_ROOT}/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

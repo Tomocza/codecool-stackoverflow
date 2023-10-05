@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useState, useEffect } from "react";
 import QuestionList from "./QuestionList";
 import { QuestionContext } from "../Layout/NavBar";
+import { BACKEND_ROOT } from '../../constants';
 
 export default function QuestionPage() {
   const [questions, setQuestions] = useState([]);
@@ -12,7 +13,7 @@ export default function QuestionPage() {
     try {
       setLoading(true);
       async function fetchQuestions() {
-        const url = questionContext === "" ? "/questions/all" : `/questions/search/${questionContext}`;
+        const url = questionContext === "" ? `${BACKEND_ROOT}/questions/all` : `${BACKEND_ROOT}/questions/search/${questionContext}`;
         const response = await fetch(url);
         const newQuestions = await response.json();
         console.log(newQuestions);
