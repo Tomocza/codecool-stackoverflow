@@ -26,6 +26,11 @@ public class QuestionController {
     return questionService.getAllQuestions();
   }
   
+  @GetMapping("/search/{title}")
+  public List<BriefQuestionDTO> getQuestionsByName(@PathVariable String title){
+    return questionService.getQuestionsByName(title);
+  }
+  
   @GetMapping ("/{id}")
   public DetailedQuestionDTO getQuestionById(@PathVariable int id) {
     return questionService.getQuestionById(id).orElse(null);
