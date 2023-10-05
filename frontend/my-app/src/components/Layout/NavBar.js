@@ -1,10 +1,55 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate, useOutletContext } from "react-router-dom";
 import "./NavBar.css";
 import logoImg from "./stack-icon.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function NavBar() {
+  const [loading, setLoading] = useState();
+  const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    try {
+      setLoading(true);
+      async function getUser() {
+        const httpRawRes = await fetch(`/users/session`);
+        const res = await httpRawRes.json();
+        if (Number.isInteger(res) && res != -1){
+          setUserId(res);
+          navigate("/questions");
+        } else {
+          setUserId(null);
+        }
+      }
+      getUser();
+    } catch (error) {
+      return console.error(error);
+    } finally {
+      setLoading(false);
+    }
+
+  }, []);
+
+  async function logout() {
+    setLoading(true);
+    try {
+      const httpRawRes = await fetch("/users/logout", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // const res = await httpRawRes.json();
+      setUserId(null);
+      navigate("/login");
+    } catch (error) {
+      return console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
   return (
     <div className="navbar">
       <nav>
@@ -27,20 +72,29 @@ function NavBar() {
           <li>
             <input type="text" placeholder="Search"></input>
           </li>
-          <li>
-            <Link to="/login">
-              <button type="button" className="buttonLogin">
-                Log in
+          {userId == null ?
+            <>
+              <li>
+                <Link to="/login">
+                  <button type="button" className="buttonLogin">
+                    Log in
+                  </button>
+                </Link>
+              </li>
+              <li>
+                <Link to="/register">
+                  <button type="button" className="buttonSignup">
+                    Sign up
+                  </button>
+                </Link>
+              </li>
+            </>
+            : <li>
+              <button type="button" className="buttonLogin" onClick={logout}>
+                Logout
               </button>
-            </Link>
-          </li>
-          <li>
-            <Link to="/register">
-              <button type="button" className="buttonSignup">
-                Sign up
-              </button>
-            </Link>
-          </li>
+            </li>
+          }
         </ul>
       </nav>
       <Outlet context={[userId, setUserId]} />

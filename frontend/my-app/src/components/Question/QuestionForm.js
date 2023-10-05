@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate, useOutletContext } from 'react-router-dom';
 import "./QuestionForm.css";
 function QuestionForm(){
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
+    const [userId, setUserId] = useOutletContext();
     const navigate = useNavigate();
 
     useEffect(() =>{
@@ -25,7 +26,7 @@ function QuestionForm(){
         const newPost = {
             title: title,
             body: body,
-            userId: 2
+            userId: userId
         }
         const response = await fetch('/questions/',{
             method: 'POST',
@@ -42,6 +43,10 @@ function QuestionForm(){
         }
       }
     return(
+        <>
+        {userId == null 
+        ? <Navigate to="/register"/>
+        : 
         <div className="questionForm">
             <h2>Ask a public question</h2>
             <div className="titleContainer">
@@ -61,6 +66,8 @@ function QuestionForm(){
                 </div>
             </div>
         </div>
+        }
+        </>
     )
 }
 

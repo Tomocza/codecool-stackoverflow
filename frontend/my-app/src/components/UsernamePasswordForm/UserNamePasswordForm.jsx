@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import '../Login/Login.css';
 import logoImg from "../Layout/stack-icon.svg";
 
@@ -15,7 +15,6 @@ export default function UserNamePasswordForm({ submitText, onSubmit, disabled, c
       <div className="loginContainer">
       <form className="loginForm" onSubmit={handleSubmit}>
         <div>
-          {/* <h2>Log in!</h2> */}
           <label htmlFor="username">Username:</label><br/>
           <input type="text" id="username" name="username" onChange={(e) => setUsername(e.target.value)} /><br/>
           <label htmlFor="pwd">Password:</label><br/>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useOutletContext } from 'react-router-dom';
 import Answer from "./Answer.js";
 import "./Answer.css";
 import DateFormatter from '../Utilities/DateFormatter.js';
@@ -9,13 +9,16 @@ function AnswerList() {
   const [question, setQuestion] = useState("");
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useOutletContext();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     try {
       setLoading(true);
+      const currentId = userId ?? -1;
       async function fetchQuestions() {
-        const response = await fetch(`/questions/${id}`);
+        const response = await fetch(`/questions/${id}/${currentId}`);
         const newQuestion = await response.json();
         setQuestion(newQuestion);
       }
@@ -30,8 +33,9 @@ function AnswerList() {
 useEffect(() => {
   try{
     setLoading(true);
+    const currentId = userId ?? -1;
     async function fetchAnswers() {
-      const response = await fetch(`/answers/question/${id}`);
+      const response = await fetch(`/answers/question/${id}/${currentId}`);
       const answers = await response.json();
       setAnswers(answers);
     }
@@ -50,7 +54,8 @@ function getBody(e) {
 async function refreshAnswers() {
   try{
     setLoading(true);
-    const response = await fetch(`/answers/question/${id}`);
+    const currentId = userId ?? -1;
+    const response = await fetch(`/answers/question/${id}/${currentId}`);
     const answers = await response.json();
     setAnswers(answers);
   } catch(error){
@@ -61,38 +66,45 @@ async function refreshAnswers() {
 }
 
 async function submitAnswer() {
-  const newAnswer = {
-    body: body,
-    userId: 2,
-    questionId: question.id
+    const newAnswer = {
+      body: body,
+      userId: userId,
+      questionId: question.id
+    }
+    try{
+      setLoading(true);
+      const response = await fetch(`/answers/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newAnswer)
+      });
+      const x = await response.json();
+      console.log(x);
+      refreshAnswers();
+    } catch(error){
+      console.error(error)
+    } finally{
+      setLoading(false);
+    }
   }
-  try{
-    setLoading(true);
-    const response = await fetch(`/answers/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newAnswer)
-    });
-    refreshAnswers();
-  } catch(error){
-    console.error(error)
-  } finally{
-    setLoading(false);
-  }
-}
 
 function handleSubmit() {
-  if (body.length >= 5) {
-    submitAnswer();
-  } else {
-    console.log("That looks like a rather short message!");
+  if (userId != null){
+    if (body.length >= 3) {
+      submitAnswer();
+    } else {
+      console.log("That looks like a rather short message!");
+    }
+  } else{
+    navigate("/register");
   }
 }
 
 async function updateQuestion() {
   try{
+    const currentId = userId ?? -1;
     setLoading(true);
-    const response = await fetch(`/questions/${question.id}`);
+    const response = await fetch(`/questions/${question.id}/${userId}`);
     const newQuestion = await response.json();
     setQuestion(newQuestion);
   } catch(error){
@@ -118,23 +130,31 @@ async function vote(newVote) {
 }
 
 async function voteUp() {
-  const newVote = {
-    userId: 2,
-    questionId: question.id,
-    value: 1
+  if (userId != null){
+    const newVote = {
+      userId: userId,
+      questionId: question.id,
+      value: 1
+    }
+    await vote(newVote);
+    updateQuestion();
+  } else {
+    navigate("/register");
   }
-  await vote(newVote);
-  updateQuestion();
 }
 
 async function voteDown() {
-  const newVote = {
-    userId: 2,
-    questionId: question.id,
-    value: -1
+  if (userId != null){
+    const newVote = {
+      userId: userId,
+      questionId: question.id,
+      value: -1
+    }
+    await vote(newVote);
+    updateQuestion();
+  } else {
+    navigate("/register");
   }
-  await vote(newVote);
-  updateQuestion();
 }
 
 return (
