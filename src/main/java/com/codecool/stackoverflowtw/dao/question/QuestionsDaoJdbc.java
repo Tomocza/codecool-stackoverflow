@@ -4,7 +4,10 @@ import com.codecool.stackoverflowtw.controller.dto.question.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.question.QuestionVoteDTO;
 import com.codecool.stackoverflowtw.dao.connection.JdbcConnector;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -21,13 +24,14 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
   @Override
   public List<QuestionModel> getAllQuestions() {
     List<QuestionModel> result = new ArrayList<>();
-    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(distinct a.id) as answer_count, qv.rating from questions q left join answers a on q.id = a.question_id left join (select question_id, sum(value) as rating from question_votes group by question_id) qv on q.id = qv.question_id group by q.id, qv.rating";
+    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(distinct a.id) as answer_count, coalesce(qv.rating, 0) as rating, coalesce(vc.vote_count, 0) = 1 as has_voted from questions q left join answers a on q.id = a.question_id left join (select question_id, sum(value) as rating from question_votes group by question_id) qv on q.id = qv.question_id left join (select question_id, count(*) as vote_count from question_votes where user_id = ? group by question_id)vc on q.id = vc.question_id group by q.id, qv.rating, vc.vote_count";
 
-    try (Connection connection = connector.getConnection(); Statement statement = connection.createStatement()) {
-      ResultSet resultSet = statement.executeQuery(sql);
+    try (Connection connection = connector.getConnection(); PreparedStatement pstmt = connection.prepareStatement(sql)) {
+      pstmt.setInt(1, -1);
+      ResultSet rs = pstmt.executeQuery();
 
-      while (resultSet.next()) {
-        result.add(getQuestionFromResultSet(resultSet));
+      while (rs.next()) {
+        result.add(getQuestionFromResultSet(rs));
       }
     }
     catch (SQLException e) {
@@ -38,13 +42,15 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
   }
 
   @Override
-  public Optional<QuestionModel> getQuestionById(int id) {
-    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(distinct a.id) as answer_count, qv.rating from questions q left join answers a on q.id = a.question_id, (select sum(value) as rating from question_votes where question_id = ?) qv where q.id = ? group by q.id, qv.rating";
+  public Optional<QuestionModel> getQuestionById(int id, int currUserId) {
+    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(distinct a.id) as answer_count, qv.rating, vc.vote_count = 1 as has_voted from questions q left join answers a on q.id = a.question_id, (select sum(value) as rating from question_votes where question_id = ?) qv, (select count(*) as vote_count from question_votes where question_id = ? and user_id = ?) vc where q.id = ? group by q.id, qv.rating, vc.vote_count";
 
     try (Connection connection = connector.getConnection(); PreparedStatement statement = connection.prepareStatement(
             sql)) {
       statement.setInt(1, id);
       statement.setInt(2, id);
+      statement.setInt(3, currUserId);
+      statement.setInt(4, id);
       ResultSet resultSet = statement.executeQuery();
 
       if (resultSet.next()) {
@@ -143,6 +149,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     LocalDateTime modifiedAt = resultSet.getTimestamp("modified_at").toLocalDateTime().truncatedTo(ChronoUnit.SECONDS);
     int answerCount = resultSet.getInt("answer_count");
     int rating = resultSet.getInt("rating");
-    return new QuestionModel(id, title, body, userId, createdAt, modifiedAt, answerCount, rating);
+    boolean hasVoted = resultSet.getBoolean("has_voted");
+    return new QuestionModel(id, title, body, userId, createdAt, modifiedAt, answerCount, rating, hasVoted);
   }
 }
