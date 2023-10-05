@@ -20,11 +20,11 @@ export default function UserNamePasswordForm({ submitText, onSubmit, disabled, c
           <label htmlFor="pwd">Password:</label><br/>
           <input type="password" id="pwd" name="pwd" onChange={(e) => setPwd(e.target.value)} /><br/>
           <div>
-          {contentError !== undefined ? contentError.map(element => 
+          {contentError?.map(element => 
               <div className="ContentErrorMessage">
                 {element}
               </div>
-            ) : <div>womm</div>}
+            )}
           </div>
           <button type="submit" disabled={disabled}>
             {submitText}

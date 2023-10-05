@@ -54,6 +54,7 @@ function Answer({answer}){
       }
     return(
         <div className="answerContainer">
+          {console.log(answer)}
                <div className="answerVoteContainer">
                     <button className="voteButton" disabled={loading}>
                       <span className="material-symbols-outlined" onClick={voteUp}>arrow_drop_up</span>
