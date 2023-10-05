@@ -20,9 +20,9 @@ export default function RegisterPage() {
 
   async function register(username, password) {
     const newContentError = [];
-    if (/.{1,}/.test(username)) {
+    if (!/.{1,}/.test(username)) {
       newContentError.push("Your username should be at least 1 character long");
-    } else if (/(?![^a-zA-Z\d]).{1,}/.test(username)) {
+    } else if (!/(?![^a-zA-Z\d]).{1,}/.test(username)) {
       newContentError.push("Your username should contain only alphanumeric characters");
     }
     if (!/[a-z]/.test(password)) {
@@ -53,9 +53,13 @@ export default function RegisterPage() {
           },
           body: JSON.stringify({ username, password }),
         });
-        const user = await httpRawRes.json();
-        console.log(user);
-        login(username, password);
+        if (httpRawRes.ok) {
+          const user = await httpRawRes.json();
+          console.log(user);
+          login(username, password);
+        } else {
+          setContentError(["You should choose a different username, because it's already in use"]);
+        }
       } catch (error) {
         console.error(error);
       } finally {
