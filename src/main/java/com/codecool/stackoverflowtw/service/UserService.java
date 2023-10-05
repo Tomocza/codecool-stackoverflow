@@ -22,18 +22,18 @@ public class UserService {
   private final UsersDAO usersDAO;
   private final List<SessionDTO> activeSessions;
   private final SecureRandom secureRandom;
-
+  
   @Autowired
   public UserService(UsersDAO usersDAO, List<SessionDTO> activeSessions, SecureRandom secureRandom) {
     this.usersDAO = usersDAO;
     this.activeSessions = activeSessions;
     this.secureRandom = secureRandom;
   }
-
+  
   public List<UserDTO> getAll() {
     return usersDAO.getAll().stream().map(e -> new UserDTO(e.id(), e.username(), e.registeredAt())).toList();
   }
-
+  
   public Optional<SessionDTO> login(UserLoginDTO userLoginDTO) {
     Optional<UserModel> user = usersDAO.getByName(userLoginDTO.username());
     if (user.isEmpty()) {
@@ -47,42 +47,27 @@ public class UserService {
     }
     return Optional.empty();
   }
-
+  
   public boolean logout(SessionDTO sessionDTO) {
     return activeSessions.remove(sessionDTO);
   }
-
+  
   public Optional<UserDTO> getById(int id) {
     Optional<UserModel> result = usersDAO.getById(id);
     return result.map(this::transformFromUserModel);
   }
-
+  
   public boolean deleteById(int id) {
     return usersDAO.deleteById(id);
   }
-
+  
   public int register(NewUserDTO user) {
     String password = generateHashedPassword(user);
-
+    
     NewUserDTO newUserDTO = new NewUserDTO(user.username(), password);
     return usersDAO.add(newUserDTO);
   }
-
-  private String generateHashedPassword(NewUserDTO user) {
-    String salt = BCrypt.gensalt(LOG_ROUNDS, new SecureRandom());
-    return BCrypt.hashpw(user.password(), salt);
-  }
-
-  private String generateSessionId() {
-    byte[] bytes = new byte[SESSION_ID_LENGTH];
-    secureRandom.nextBytes(bytes);
-    return String.copyValueOf(Hex.encode(bytes));
-  }
-
-  private UserDTO transformFromUserModel(UserModel model) {
-    return new UserDTO(model.id(), model.username(), model.registeredAt());
-  }
-
+  
   public int hasValidSession(String sessionId) {
     System.out.println(activeSessions);
     System.out.println(sessionId);
@@ -92,9 +77,23 @@ public class UserService {
                            .findFirst()
                            .orElseThrow()
                            .user_id();
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       return -1;
     }
+  }
+  
+  private String generateHashedPassword(NewUserDTO user) {
+    String salt = BCrypt.gensalt(LOG_ROUNDS, new SecureRandom());
+    return BCrypt.hashpw(user.password(), salt);
+  }
+  
+  private String generateSessionId() {
+    byte[] bytes = new byte[SESSION_ID_LENGTH];
+    secureRandom.nextBytes(bytes);
+    return String.copyValueOf(Hex.encode(bytes));
+  }
+  
+  private UserDTO transformFromUserModel(UserModel model) {
+    return new UserDTO(model.id(), model.username(), model.registeredAt());
   }
 }
