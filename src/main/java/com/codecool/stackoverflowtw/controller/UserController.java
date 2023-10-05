@@ -78,7 +78,7 @@ public class UserController {
     Cookie cookie = new Cookie(SESSION_ID, sessionId);
     cookie.setHttpOnly(true);
     Dotenv dotenv = Dotenv.load();
-    cookie.setDomain(dotenv.get("DB_HOST"));
+    cookie.setDomain(dotenv.get("DOMAIN_NAME"));
     cookie.setPath("/");
     cookie.setMaxAge(StackoverflowTwApplication.SESSION_EXPIRY_IN_SECONDS);
     return cookie;

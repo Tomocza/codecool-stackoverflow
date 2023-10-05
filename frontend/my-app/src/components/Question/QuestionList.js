@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 
 import "../../App.css";
 import Question from './Question';
+import { BACKEND_ROOT } from '../../constants';
 function QuestionList(){
     const [questions, setQuestions] = useState([]);
 
     useEffect(() => {
       async function fetchQuestions(){
-        const response = await fetch('/questions/all');
+        const response = await fetch(`${BACKEND_ROOT}/questions/all`);
         const newQuestions = await response.json();
         // console.log(newQuestions);
         setQuestions(newQuestions);
