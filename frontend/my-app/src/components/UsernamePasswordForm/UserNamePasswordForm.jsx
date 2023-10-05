@@ -20,8 +20,8 @@ export default function UserNamePasswordForm({ submitText, onSubmit, disabled, c
           <label htmlFor="pwd">Password:</label><br/>
           <input type="password" id="pwd" name="pwd" onChange={(e) => setPwd(e.target.value)} /><br/>
           <div>
-          {contentError?.map(element => 
-              <div className="ContentErrorMessage">
+          {contentError?.map((element, i) => 
+              <div className="ContentErrorMessage" key={i}>
                 {element}
               </div>
             )}
