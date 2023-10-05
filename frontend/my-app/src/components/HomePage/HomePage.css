@@ -119,13 +119,14 @@
         margin-bottom: 1.5vh;
     }
     .homePage > h1 {
-        padding-top: 60vh;
+        padding-top: 63vh;
     }    
   }
 
   @media (max-width: 700px){
     .homePage > h1 {
         font-size: 42px;
+        padding-top: 68vh;
     }    
   }
   

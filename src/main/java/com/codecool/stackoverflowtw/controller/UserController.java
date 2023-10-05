@@ -6,7 +6,6 @@ import com.codecool.stackoverflowtw.controller.dto.user.SessionDTO;
 import com.codecool.stackoverflowtw.controller.dto.user.UserDTO;
 import com.codecool.stackoverflowtw.controller.dto.user.UserLoginDTO;
 import com.codecool.stackoverflowtw.service.UserService;
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,7 @@ public class UserController {
   }
   
   @PostMapping ("/")
-  public int register(@RequestBody NewUserDTO user, HttpServletResponse response) {
+  public int register(@RequestBody NewUserDTO user) {
     return userService.register(user);
   }
   
@@ -75,8 +74,6 @@ public class UserController {
   private Cookie generateCookie(String sessionId) {
     Cookie cookie = new Cookie(SESSION_ID, sessionId);
     cookie.setHttpOnly(true);
-    Dotenv dotenv = Dotenv.load();
-    cookie.setDomain(dotenv.get("DOMAIN_NAME"));
     cookie.setPath("/");
     cookie.setMaxAge(StackoverflowTwApplication.SESSION_EXPIRY_IN_SECONDS);
     return cookie;
@@ -85,8 +82,6 @@ public class UserController {
   private Cookie generateDeletedCookie() {
     Cookie cookie = new Cookie(SESSION_ID, DELETED);
     cookie.setHttpOnly(true);
-    Dotenv dotenv = Dotenv.load();
-    cookie.setDomain(dotenv.get("DB_HOST"));
     cookie.setPath("/");
     cookie.setMaxAge(1);
     return cookie;

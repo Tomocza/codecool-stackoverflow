@@ -69,8 +69,6 @@ public class UserService {
   }
   
   public int hasValidSession(String sessionId) {
-    System.out.println(activeSessions);
-    System.out.println(sessionId);
     try {
       return activeSessions.stream()
                            .filter(session -> session.session_id().equalsIgnoreCase(sessionId))
