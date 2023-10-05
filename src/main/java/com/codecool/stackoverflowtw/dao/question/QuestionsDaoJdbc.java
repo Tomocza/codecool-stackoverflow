@@ -40,6 +40,32 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
   }
   
   @Override
+  public List<QuestionModel> getQuestionByName(String name) {
+    System.out.println(name);
+    List<QuestionModel> result = new ArrayList<>();
+    String sql = "SELECT q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, " +
+                 "COUNT(a.id) AS answer_count, SUM(qv.value) AS rating " +
+                 "FROM questions q " +
+                 "LEFT JOIN answers a ON q.id = a.question_id " +
+                 "LEFT JOIN question_votes qv ON q.id = qv.question_id " +
+                 "WHERE q.title ILIKE '%'|| ? || '%'" +
+                 "GROUP BY q.id";
+    try(Connection connection = connector.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setString(1, name);
+        ResultSet resultSet = statement.executeQuery();
+        
+        while (resultSet.next()){
+          result.add(getQuestionFromResultSet(resultSet));
+        }
+    }
+    catch(SQLException e) {
+      throw new RuntimeException(e);
+    }
+    
+    return result;
+  }
+  
+  @Override
   public Optional<QuestionModel> getQuestionById(int id) {
     String sql =
             "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(a.id) as answer_count, sum" +
