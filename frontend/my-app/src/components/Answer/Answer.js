@@ -49,7 +49,7 @@ function Answer({currentAnswer}){
       async function deleteVote(answerId){
         try{
           setLoading(true);
-          const response = await fetch(`/answers/votes/${answerId}/${userId}`,{
+          const response = await fetch(`${BACKEND_ROOT}/answers/votes/${answerId}/${userId}`,{
             method: 'DELETE',
             headers: {'Content-Type': 'application/json'}
         });
