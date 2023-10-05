@@ -24,7 +24,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
   @Override
   public List<QuestionModel> getAllQuestions() {
     List<QuestionModel> result = new ArrayList<>();
-    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(distinct a.id) as answer_count, coalesce(qv.rating, 0) as rating, coalesce(vc.vote_count, 0) = 1 as has_voted from questions q left join answers a on q.id = a.question_id left join (select question_id, sum(value) as rating from question_votes group by question_id) qv on q.id = qv.question_id left join (select question_id, count(*) as vote_count from question_votes where user_id = ? group by question_id)vc on q.id = vc.question_id group by q.id, qv.rating, vc.vote_count";
+    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(distinct a.id) as answer_count, coalesce(qv.rating, 0) as rating, coalesce(vc.vote_count, 0) as has_voted from questions q left join answers a on q.id = a.question_id left join (select question_id, sum(value) as rating from question_votes group by question_id) qv on q.id = qv.question_id left join (select question_id, value as vote_count from question_votes where user_id = ? group by question_id, value) vc on q.id = vc.question_id group by q.id, qv.rating, vc.vote_count";
 
     try (Connection connection = connector.getConnection(); PreparedStatement pstmt = connection.prepareStatement(sql)) {
       pstmt.setInt(1, -1);
@@ -33,23 +33,42 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
       while (rs.next()) {
         result.add(getQuestionFromResultSet(rs));
       }
-    }
-    catch (SQLException e) {
+    } catch (SQLException e) {
       throw new RuntimeException(e);
     }
-
+    
     return result;
   }
-
+  
+  @Override
+  public List<QuestionModel> getQuestionByName(String name) { // not finished, need the query
+    List<QuestionModel> result = new ArrayList<>();
+    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(distinct a.id) as answer_count, coalesce(qv.rating, 0) as rating, coalesce(vc.vote_count, 0) = 1 as has_voted from questions q left join answers a on q.id = a.question_id left join (select question_id, sum(value) as rating from question_votes group by question_id) qv on q.id = qv.question_id left join (select question_id, count(*) as vote_count from question_votes where user_id = ? and q.title ilike '%'||?||'%' group by question_id)vc on q.id = vc.question_id group by q.id, qv.rating, vc.vote_count";;
+    try(Connection connection = connector.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+      statement.setInt(1, -1);
+      statement.setString(2, name);
+        ResultSet resultSet = statement.executeQuery();
+        
+        while (resultSet.next()){
+          result.add(getQuestionFromResultSet(resultSet));
+        }
+    }
+    catch(SQLException e) {
+      throw new RuntimeException(e);
+    }
+    
+    return result;
+  }
+  
   @Override
   public Optional<QuestionModel> getQuestionById(int id, int currUserId) {
-    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(distinct a.id) as answer_count, qv.rating, vc.vote_count = 1 as has_voted from questions q left join answers a on q.id = a.question_id, (select sum(value) as rating from question_votes where question_id = ?) qv, (select count(*) as vote_count from question_votes where question_id = ? and user_id = ?) vc where q.id = ? group by q.id, qv.rating, vc.vote_count";
+    String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(distinct a.id) as answer_count, qv.rating, coalesce(vc.vote_count, 0) as has_voted from questions q left join answers a on q.id = a.question_id left join (select question_id, value as vote_count from question_votes  where question_id = ? and user_id = ?) vc on q.id = vc.question_id, (select sum(value) as rating from question_votes where question_id = ?) qv where q.id = ? group by q.id, qv.rating, vc.vote_count";
 
     try (Connection connection = connector.getConnection(); PreparedStatement statement = connection.prepareStatement(
             sql)) {
       statement.setInt(1, id);
-      statement.setInt(2, id);
-      statement.setInt(3, currUserId);
+      statement.setInt(2, currUserId);
+      statement.setInt(3, id);
       statement.setInt(4, id);
       ResultSet resultSet = statement.executeQuery();
 
@@ -149,7 +168,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     LocalDateTime modifiedAt = resultSet.getTimestamp("modified_at").toLocalDateTime().truncatedTo(ChronoUnit.SECONDS);
     int answerCount = resultSet.getInt("answer_count");
     int rating = resultSet.getInt("rating");
-    boolean hasVoted = resultSet.getBoolean("has_voted");
+    int hasVoted = resultSet.getInt("has_voted");
     return new QuestionModel(id, title, body, userId, createdAt, modifiedAt, answerCount, rating, hasVoted);
   }
 }

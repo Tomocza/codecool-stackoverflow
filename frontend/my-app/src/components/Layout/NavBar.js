@@ -1,12 +1,15 @@
 import { Outlet, Link, useNavigate, useOutletContext } from "react-router-dom";
+import React, { createContext } from "react";
 import "./NavBar.css";
 import logoImg from "./stack-icon.svg";
 import { useEffect, useState } from "react";
 
+export const QuestionContext = createContext("");
 function NavBar() {
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
+  const [searcher, setSearcher] = useState("");
 
   useEffect(() => {
     try {
@@ -49,7 +52,10 @@ function NavBar() {
     }
   }
 
-
+  function changeQuery(message) {
+    setSearcher(message);
+    navigate("/questions");
+  }
   return (
     <div className="navbar">
       <nav>
@@ -70,7 +76,12 @@ function NavBar() {
             </Link>
           </li>
           <li>
-            <input type="text" placeholder="Search"></input>
+            <input
+              value={searcher}
+              type="text"
+              placeholder="Search"
+              onChange={(e) => changeQuery(e.target.value)}
+            ></input>
           </li>
           {userId == null ?
             <>
@@ -97,7 +108,9 @@ function NavBar() {
           }
         </ul>
       </nav>
-      <Outlet context={[userId, setUserId]} />
+      <QuestionContext.Provider value={searcher}>
+        <Outlet context={[userId, setUserId]} />
+      </QuestionContext.Provider>
     </div>
   );
 }

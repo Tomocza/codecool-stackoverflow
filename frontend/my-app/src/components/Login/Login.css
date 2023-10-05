@@ -13,6 +13,12 @@
     position: relative;
 }
 
+.ContentErrorMessage {
+    color: red;
+    font-size: 12px;
+    margin: 12px;
+}
+
 .loginContainer {
     margin: 0 auto;
     display: grid;

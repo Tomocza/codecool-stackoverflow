@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface QuestionsDAO {
   List<QuestionModel> getAllQuestions();
   Optional<QuestionModel> getQuestionById(int id, int currUserId);
+  List<QuestionModel> getQuestionByName(String name);
   int addNewQuestion(NewQuestionDTO newQuestionDTO);
   boolean deleteQuestionById(int id);
   boolean addVoteToQuestion(QuestionVoteDTO questionVoteDTO);
