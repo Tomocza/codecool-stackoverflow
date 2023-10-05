@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import DateFormatter from "../Utilities/DateFormatter";
 import "./Answer.css"
+import { BACKEND_ROOT } from '../../constants';
 function Answer({currentAnswer}){
     const [answer, setAnswer] = useState(currentAnswer);
-import { BACKEND_ROOT } from '../../constants';
-function Answer({answer}){
     const [rating, setRating] = useState(answer.rating);
     const [loading, setLoading] = useState(false);
     const [userId, setUserId] = useOutletContext();
