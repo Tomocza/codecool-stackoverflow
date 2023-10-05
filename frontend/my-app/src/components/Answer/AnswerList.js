@@ -57,7 +57,7 @@ async function refreshAnswers() {
     const currentId = userId ?? -1;
     const response = await fetch(`/answers/question/${id}/${currentId}`);
     const answers = await response.json();
-    setAnswers(answers);
+    setAnswers(() => answers);
   } catch(error){
     console.error(error)
   } finally{
