@@ -1,8 +1,10 @@
 import { Outlet, Link } from "react-router-dom";
 import "./NavBar.css";
 import logoImg from "./stack-icon.svg";
+import { useState } from "react";
 
 function NavBar() {
+  const [userId, setUserId] = useState(null);
   return (
     <div className="navbar">
       <nav>
@@ -22,9 +24,6 @@ function NavBar() {
               <button type="button">Questions</button>
             </Link>
           </li>
-          {/* <li>
-        <button type="button">Products</button>
-        </li> */}
           <li>
             <input type="text" placeholder="Search"></input>
           </li>
@@ -44,7 +43,7 @@ function NavBar() {
           </li>
         </ul>
       </nav>
-      <Outlet />
+      <Outlet context={[userId, setUserId]} />
     </div>
   );
 }
