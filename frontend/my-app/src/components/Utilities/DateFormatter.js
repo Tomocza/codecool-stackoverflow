@@ -22,14 +22,18 @@ function DateFormatter({ date }) {
     }
 
     function extendToTwoDigits(datePart) {
-        let extendedDatePart = "";
-        if (datePart.toString().length === 1) {
-            extendedDatePart += "0" + datePart;
-        } else {
-            extendedDatePart += datePart;
+        if (datePart != undefined){
+            let extendedDatePart = "";
+            if (datePart.toString().length === 1) {
+                extendedDatePart += "0" + datePart;
+            } else {
+                extendedDatePart += datePart;
+            }
+            return extendedDatePart;
         }
-        return extendedDatePart;
+        return "";
     }
+
     return (
         <>
             {formatDate(date ?? [0, 0, 0, 0, 0, 0])}

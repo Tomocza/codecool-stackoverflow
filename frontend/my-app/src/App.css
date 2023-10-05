@@ -3,6 +3,14 @@ body{
   font-family: 'Open Sans', sans-serif;
 }
 
+.upVoted{
+  background-color: rgb(205, 233, 254) !important;
+}
+
+.downVoted{
+  background-color: rgb(251, 200, 200) !important;
+}
+
 .questionList{
   margin: 0 auto;
   /* margin-top: 8vh; */
