@@ -26,10 +26,19 @@ public class QuestionController {
   public List<BriefQuestionDTO> getAllQuestions() {
     return questionService.getAllQuestions();
   }
+  @GetMapping("/search/{title}")
+  public List<BriefQuestionDTO> getQuestionsByName(@PathVariable String title){
+    return questionService.getQuestionsByName(title);
+  }
 
   @GetMapping("/{qId}/{uId}")
   public DetailedQuestionDTO getQuestionById(@PathVariable int qId, @PathVariable int uId) {
     return questionService.getQuestionById(qId, uId).orElse(null);
+  }
+  
+  @GetMapping ("/{id}")
+  public DetailedQuestionDTO getQuestionById(@PathVariable int id) {
+    return questionService.getQuestionById(id).orElse(null);
   }
 
   @PostMapping("/")

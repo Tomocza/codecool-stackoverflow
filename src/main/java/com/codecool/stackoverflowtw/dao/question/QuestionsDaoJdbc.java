@@ -33,14 +33,38 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
       while (rs.next()) {
         result.add(getQuestionFromResultSet(rs));
       }
-    }
-    catch (SQLException e) {
+    } catch (SQLException e) {
       throw new RuntimeException(e);
     }
-
+    
     return result;
   }
-
+  
+  @Override
+  public List<QuestionModel> getQuestionByName(String name) {
+    List<QuestionModel> result = new ArrayList<>();
+    String sql = "SELECT q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, " +
+                 "COUNT(a.id) AS answer_count, SUM(qv.value) AS rating " +
+                 "FROM questions q " +
+                 "LEFT JOIN answers a ON q.id = a.question_id " +
+                 "LEFT JOIN question_votes qv ON q.id = qv.question_id " +
+                 "WHERE q.title ILIKE '%'|| ? || '%'" +
+                 "GROUP BY q.id";
+    try(Connection connection = connector.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setString(1, name);
+        ResultSet resultSet = statement.executeQuery();
+        
+        while (resultSet.next()){
+          result.add(getQuestionFromResultSet(resultSet));
+        }
+    }
+    catch(SQLException e) {
+      throw new RuntimeException(e);
+    }
+    
+    return result;
+  }
+  
   @Override
   public Optional<QuestionModel> getQuestionById(int id, int currUserId) {
     String sql = "select q.id, q.title, q.body, q.user_id, q.created_at, q.modified_at, count(distinct a.id) as answer_count, qv.rating, vc.vote_count = 1 as has_voted from questions q left join answers a on q.id = a.question_id, (select sum(value) as rating from question_votes where question_id = ?) qv, (select count(*) as vote_count from question_votes where question_id = ? and user_id = ?) vc where q.id = ? group by q.id, qv.rating, vc.vote_count";
