@@ -134,7 +134,7 @@ async function updateQuestion() {
 async function deleteVote(newVote) {
   try{
     setLoading(true);
-    const response = await fetch(`/questions/votes/${question.id}/${userId}`, {
+    const response = await fetch(`${BACKEND_ROOT}/questions/votes/${question.id}/${userId}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       });
