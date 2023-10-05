@@ -45,7 +45,8 @@ public class AnswersDAOJdbc implements AnswersDAO {
     String sql = "select a.id, a.question_id, a.body, a.user_id, a.created_at, a.modified_at, a.accepted, sum(av.value) as rating, vc.vote_count = 1 as has_voted from answers a left join answer_votes av on a.id = av.answer_id, (select count(*) as vote_count from answer_votes av where av.user_id = ?) vc where a.id = ? group by a.id, has_voted";
 
     try (Connection connection = connector.getConnection(); PreparedStatement pstmt = connection.prepareStatement(sql)) {
-      pstmt.setInt(1, answerId);
+      pstmt.setInt(1, -1);
+      pstmt.setInt(2, answerId);
       ResultSet resultSet = pstmt.executeQuery();
 
       if (resultSet.next()) {
