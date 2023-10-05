@@ -12,55 +12,55 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping ("questions")
+@RequestMapping("questions")
 public class QuestionController {
   private static final String DOMAIN = "localhost:8080";
   private final QuestionService questionService;
-  
+
   @Autowired
   public QuestionController(QuestionService questionService) {
     this.questionService = questionService;
   }
-  
-  @GetMapping ("/all")
+
+  @GetMapping("/all")
   public List<BriefQuestionDTO> getAllQuestions() {
     return questionService.getAllQuestions();
   }
-  
-  @GetMapping ("/{id}")
-  public DetailedQuestionDTO getQuestionById(@PathVariable int id) {
-    return questionService.getQuestionById(id).orElse(null);
+
+  @GetMapping("/{qId}/{uId}")
+  public DetailedQuestionDTO getQuestionById(@PathVariable int qId, @PathVariable int uId) {
+    return questionService.getQuestionById(qId, uId).orElse(null);
   }
-  
-  @PostMapping ("/")
+
+  @PostMapping("/")
   public int addNewQuestion(@RequestBody NewQuestionDTO question, HttpServletResponse response) {
     if (question.userId() != getUserId(response)) {
       return -1;
     }
     return questionService.addNewQuestion(question);
   }
-  
-  @DeleteMapping ("/{id}")
+
+  @DeleteMapping("/{id}")
   public boolean deleteQuestionById(@PathVariable int id) {
     return questionService.deleteQuestionById(id);
   }
-  
-  @PostMapping ("/votes")
+
+  @PostMapping("/votes")
   public int addVoteToQuestion(@RequestBody QuestionVoteDTO questionVoteDTO, HttpServletResponse response) {
     if (questionVoteDTO.userId() != getUserId(response)) {
       return -1;
     }
     return questionService.addVoteToQuestion(questionVoteDTO);
   }
-  
-  @DeleteMapping ("/votes/{qId}/{uId}")
+
+  @DeleteMapping("/votes/{qId}/{uId}")
   public int deleteQuestionVote(@PathVariable int qId, @PathVariable int uId, HttpServletResponse response) {
     if (uId != getUserId(response)) {
       return -1;
     }
     return questionService.deleteQuestionVote(qId, uId);
   }
-  
+
   private int getUserId(HttpServletResponse response) {
     return Integer.parseInt(response.getHeader("user_id"));
   }

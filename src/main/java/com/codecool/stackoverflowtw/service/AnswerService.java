@@ -17,33 +17,34 @@ import java.util.Optional;
 public class AnswerService {
   private final AnswersDAO answersDAO;
   private final UsersDAO usersDAO;
-  
+
   @Autowired
   public AnswerService(AnswersDAO answersDAO, UsersDAO usersDAO) {
     this.answersDAO = answersDAO;
     this.usersDAO = usersDAO;
   }
-  
-  public List<AnswerDTO> getAnswersByQuestionId(int questionId) {
-    return answersDAO.getAnswersByQuestionId(questionId)
+
+  public List<AnswerDTO> getAnswersByQuestionId(int questionId, int userId) {
+    return answersDAO.getAnswersByQuestionId(questionId, userId)
                      .stream()
                      .map(e -> new AnswerDTO(e.id(),
                                              e.body(),
                                              getUsername(e.userId()),
                                              e.createdAt(),
                                              e.accepted(),
-                                             e.rating()))
+                                             e.rating(),
+                                             e.hasVoted()))
                      .toList();
   }
-  
+
   public int addNewAnswer(NewAnswerDTO newAnswerDTO) {
     return answersDAO.addNewAnswer(newAnswerDTO);
   }
-  
+
   public boolean deleteAnswerById(int id) {
     return answersDAO.deleteAnswerById(id);
   }
-  
+
   public int addVoteToAnswer(AnswerVoteDTO answerVoteDTO) {
     int result = 0;
     if (answersDAO.addVoteToAnswer(answerVoteDTO)) {
@@ -52,7 +53,7 @@ public class AnswerService {
     }
     return result;
   }
-  
+
   public int deleteAnswerVote(int answerId, int userId) {
     int result = 0;
     if (answersDAO.deleteAnswerVote(answerId, userId)) {
@@ -61,7 +62,7 @@ public class AnswerService {
     }
     return result;
   }
-  
+
   private String getUsername(int user_id) {
     return usersDAO.getById(user_id).orElseGet(() -> new UserModel(0, "anonymous", "", null)).username();
   }

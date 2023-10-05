@@ -22,20 +22,19 @@ public class AnswersDAOJdbc implements AnswersDAO {
   }
 
   @Override
-  public List<AnswerModel> getAnswersByQuestionId(int questionId) {
+  public List<AnswerModel> getAnswersByQuestionId(int questionId, int userId) {
     List<AnswerModel> result = new ArrayList<>();
-    String sql =
-            "select a.id, a.question_id, a.body, a.user_id, a.created_at, a.modified_at, a.accepted, sum(av.value) as" +
-            " rating from answers a left join answer_votes av on a.id = av.answer_id where a.question_id = ? group by" +
-            " a.id";
+    String sql = "select a.id, a.question_id, a.body, a.user_id, a.created_at, a.modified_at, a.accepted, sum(av.value) as rating, coalesce(vc.vote_count, 0) = 1 as has_voted from answers a left join answer_votes av on a.id = av.answer_id left join (select av.answer_id, count(*) as vote_count from answer_votes av where av.user_id = ? group by av.answer_id) vc on a.id = vc.answer_id where a.question_id = ? group by a.id, has_voted";
     try (Connection conn = connector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-      pstmt.setInt(1, questionId);
+      pstmt.setInt(1, userId);
+      pstmt.setInt(2, questionId);
       ResultSet rs = pstmt.executeQuery();
 
       while (rs.next()) {
         result.add(getAnswerFromResultSet(rs));
       }
-    } catch (SQLException e) {
+    }
+    catch (SQLException e) {
       throw new RuntimeException(e);
     }
     return result;
@@ -43,19 +42,17 @@ public class AnswersDAOJdbc implements AnswersDAO {
 
   @Override
   public Optional<AnswerModel> getAnswerById(int answerId) {
-    String sql =
-            "select a.id, a.question_id, a.body, a.user_id, a.created_at, a.modified_at, a.accepted, sum(av.value) as" +
-            " rating from answers a left join answer_votes av on a.id = av.answer_id where a.id = ? group by a.id";
+    String sql = "select a.id, a.question_id, a.body, a.user_id, a.created_at, a.modified_at, a.accepted, sum(av.value) as rating, vc.vote_count = 1 as has_voted from answers a left join answer_votes av on a.id = av.answer_id, (select count(*) as vote_count from answer_votes av where av.user_id = ?) vc where a.id = ? group by a.id, has_voted";
 
-    try (Connection connection = connector.getConnection();
-         PreparedStatement pstmt = connection.prepareStatement(sql)) {
+    try (Connection connection = connector.getConnection(); PreparedStatement pstmt = connection.prepareStatement(sql)) {
       pstmt.setInt(1, answerId);
       ResultSet resultSet = pstmt.executeQuery();
 
       if (resultSet.next()) {
         return Optional.of(getAnswerFromResultSet(resultSet));
       }
-    } catch (SQLException e) {
+    }
+    catch (SQLException e) {
       throw new RuntimeException(e);
     }
 
@@ -76,7 +73,8 @@ public class AnswersDAOJdbc implements AnswersDAO {
       if (rs.next()) {
         result = rs.getInt("id");
       }
-    } catch (SQLException e) {
+    }
+    catch (SQLException e) {
       throw new RuntimeException(e);
     }
 
@@ -91,7 +89,8 @@ public class AnswersDAOJdbc implements AnswersDAO {
     try (Connection conn = connector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
       pstmt.setInt(1, id);
       result = pstmt.executeUpdate() > 0;
-    } catch (SQLException e) {
+    }
+    catch (SQLException e) {
       throw new RuntimeException(e);
     }
 
@@ -101,9 +100,7 @@ public class AnswersDAOJdbc implements AnswersDAO {
   @Override
   public boolean addVoteToAnswer(AnswerVoteDTO answerVoteDTO) {
     boolean result = false;
-    String sql =
-            "insert into answer_votes(answer_id, user_id, value) values(?,?,?) on conflict (answer_id, user_id) do " +
-            "update set value = ?";
+    String sql = "insert into answer_votes(answer_id, user_id, value) values(?,?,?) on conflict (answer_id, user_id) do " + "update set value = ?";
 
     try (Connection conn = connector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
       pstmt.setInt(1, answerVoteDTO.answerId());
@@ -111,7 +108,8 @@ public class AnswersDAOJdbc implements AnswersDAO {
       pstmt.setInt(3, answerVoteDTO.value());
       pstmt.setInt(4, answerVoteDTO.value());
       result = pstmt.executeUpdate() > 0;
-    } catch (SQLException e) {
+    }
+    catch (SQLException e) {
       throw new RuntimeException(e);
     }
 
@@ -127,7 +125,8 @@ public class AnswersDAOJdbc implements AnswersDAO {
       pstmt.setInt(1, answerId);
       pstmt.setInt(2, userId);
       result = pstmt.executeUpdate() > 0;
-    } catch (SQLException e) {
+    }
+    catch (SQLException e) {
       throw new RuntimeException(e);
     }
 
@@ -143,6 +142,7 @@ public class AnswersDAOJdbc implements AnswersDAO {
     LocalDateTime modifiedAt = rs.getTimestamp("modified_at").toLocalDateTime().truncatedTo(ChronoUnit.SECONDS);
     boolean accepted = rs.getBoolean("accepted");
     int rating = rs.getInt("rating");
-    return new AnswerModel(id, questionId, body, userId, createdAt, modifiedAt, accepted, rating);
+    boolean hasVoted = rs.getBoolean("has_voted");
+    return new AnswerModel(id, questionId, body, userId, createdAt, modifiedAt, accepted, rating, hasVoted);
   }
 }

@@ -26,6 +26,7 @@ export default function LoginPage() {
         },
         body: JSON.stringify({ username, password }),
       });
+      console.log("login" + httpRawRes);
       const res = await httpRawRes.json();
       console.log(res);
       setUserId(res);

@@ -16,8 +16,9 @@ function AnswerList() {
   useEffect(() => {
     try {
       setLoading(true);
+      const currentId = userId ?? -1;
       async function fetchQuestions() {
-        const response = await fetch(`/questions/${id}`);
+        const response = await fetch(`/questions/${id}/${currentId}`);
         const newQuestion = await response.json();
         setQuestion(newQuestion);
       }
@@ -32,8 +33,9 @@ function AnswerList() {
 useEffect(() => {
   try{
     setLoading(true);
+    const currentId = userId ?? -1;
     async function fetchAnswers() {
-      const response = await fetch(`/answers/question/${id}`);
+      const response = await fetch(`/answers/question/${id}/${currentId}`);
       const answers = await response.json();
       setAnswers(answers);
     }
@@ -52,7 +54,8 @@ function getBody(e) {
 async function refreshAnswers() {
   try{
     setLoading(true);
-    const response = await fetch(`/answers/question/${id}`);
+    const currentId = userId ?? -1;
+    const response = await fetch(`/answers/question/${id}/${currentId}`);
     const answers = await response.json();
     setAnswers(answers);
   } catch(error){
@@ -99,8 +102,9 @@ function handleSubmit() {
 
 async function updateQuestion() {
   try{
+    const currentId = userId ?? -1;
     setLoading(true);
-    const response = await fetch(`/questions/${question.id}`);
+    const response = await fetch(`/questions/${question.id}/${userId}`);
     const newQuestion = await response.json();
     setQuestion(newQuestion);
   } catch(error){
