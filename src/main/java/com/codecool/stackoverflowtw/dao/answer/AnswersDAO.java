@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AnswersDAO {
-  List<AnswerModel> getAnswersByQuestionId(int questionId);
+  List<AnswerModel> getAnswersByQuestionId(int questionId, int userId);
   Optional<AnswerModel> getAnswerById(int answerId);
   int addNewAnswer(NewAnswerDTO newAnswerDTO);
   boolean deleteAnswerById(int id);

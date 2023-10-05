@@ -61,17 +61,11 @@ public class UserService {
     return usersDAO.deleteById(id);
   }
 
-  public Optional<SessionDTO> register(NewUserDTO user) {
+  public int register(NewUserDTO user) {
     String password = generateHashedPassword(user);
 
     NewUserDTO newUserDTO = new NewUserDTO(user.username(), password);
-    int id = usersDAO.add(newUserDTO);
-    if (id < 0) {
-      return Optional.empty();
-    }
-
-    UserLoginDTO userLoginDTO = new UserLoginDTO(user.username(), user.password());
-    return login(userLoginDTO);
+    return usersDAO.add(newUserDTO);
   }
 
   private String generateHashedPassword(NewUserDTO user) {

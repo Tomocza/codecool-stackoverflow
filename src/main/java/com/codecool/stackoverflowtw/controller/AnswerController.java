@@ -20,9 +20,9 @@ public class AnswerController {
     this.answerService = answerService;
   }
   
-  @GetMapping ("/question/{id}")
-  public List<AnswerDTO> getAnswersByQuestionId(@PathVariable int id) {
-    return answerService.getAnswersByQuestionId(id);
+  @GetMapping ("/question/{qId}/{uId}")
+  public List<AnswerDTO> getAnswersByQuestionId(@PathVariable int qId, @PathVariable int uId) {
+    return answerService.getAnswersByQuestionId(qId, uId);
   }
   
   @PostMapping ("/")
