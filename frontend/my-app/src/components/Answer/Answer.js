@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import DateFormatter from "../Utilities/DateFormatter";
 import "./Answer.css"
 function Answer({answer}){
     const [rating, setRating] = useState(answer.rating);
     const [loading, setLoading] = useState(false);
+    const [userId, setUserId] = useOutletContext();
+    const navigate = useNavigate();
       
     async function vote(newVote){
         try{
@@ -24,21 +27,30 @@ function Answer({answer}){
       }
     
       async function voteUp() {
-        const newVote = {
-          userId: 2,
-          answerId: answer.id,
-          value: 1
+        if (userId != null){
+          const newVote = {
+            userId: userId,
+            answerId: answer.id,
+            value: 1
+          }
+          await vote(newVote);
+        } else{
+          navigate("/register");
+
         }
-        await vote(newVote);
       }
     
       async function voteDown() {
-        const newVote = {
-          userId: 2,
-          answerId: answer.id,
-          value: -1
+        if (userId != null){
+          const newVote = {
+            userId: userId,
+            answerId: answer.id,
+            value: -1
+          }
+          await vote(newVote);
+        } else {
+          navigate("/register");
         }
-        await vote(newVote);
       }
     return(
         <div className="answerContainer">
