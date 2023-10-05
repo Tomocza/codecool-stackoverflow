@@ -3,37 +3,28 @@ import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 
 import "../../App.css";
 import Question from './Question';
-<<<<<<< HEAD
 import { BACKEND_ROOT } from '../../constants';
 function QuestionList(){
     const [questions, setQuestions] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [userId, setUserId] = useOutletContext();
+    const navigate = useNavigate();
 
     useEffect(() => {
-      async function fetchQuestions(){
-        const response = await fetch(`${BACKEND_ROOT}/questions/all`);
-=======
-function QuestionList() {
-  const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useOutletContext();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    try {
-      setLoading(true);
-      async function fetchQuestions() {
-        const response = await fetch('/questions/all');
->>>>>>> f29a96d334f05d5cc4bc07a1a71086c867217530
-        const newQuestions = await response.json();
-        setQuestions(newQuestions);
-      }
-      fetchQuestions();
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
-  }, []);
+        try {
+            setLoading(true);
+            async function fetchQuestions() {
+                const response = await fetch(`${BACKEND_ROOT}/questions/all`);
+                const newQuestions = await response.json();
+                setQuestions(newQuestions);
+            }
+            fetchQuestions();
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false)
+        }
+    }, []);
 
   return (
     <div className="questionList">
