@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import NavBar from "./components/Layout/NavBar";
-import QuestionList from "./components/Question/QuestionList";
 import HomePage from "./components/HomePage/HomePage";
 import QuestionForm from "./components/Question/QuestionForm";
 
@@ -11,6 +10,7 @@ import "./index.css";
 import AnswerList from "./components/Answer/AnswerList";
 import LoginPage from "./components/Login/LoginPage";
 import RegisterPage from "./components/Register/RegisterPage";
+import QuestionPage from "./components/Question/QuestionPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/questions",
-        element: <QuestionList />,
+        element: <QuestionPage />,
       },
       {
         path: "/answers/:id",
