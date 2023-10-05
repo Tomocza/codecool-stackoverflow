@@ -5,16 +5,22 @@ import "../../App.css";
 import Question from './Question';
 function QuestionList(){
     const [questions, setQuestions] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-      async function fetchQuestions(){
-        const response = await fetch('/questions/all');
-        const newQuestions = await response.json();
-        // console.log(newQuestions);
-        setQuestions(newQuestions);
+      try{
+        setLoading(true);
+        async function fetchQuestions(){
+          const response = await fetch('/questions/all');
+          const newQuestions = await response.json();
+          setQuestions(newQuestions);
+        }
+        fetchQuestions();
+      } catch(error){
+        console.error(error)
+      } finally{
+        setLoading(false)
       }
-      fetchQuestions();
-        // addQuestions();
       }, []);
 
     return (
@@ -22,7 +28,7 @@ function QuestionList(){
             <div>
                 <h2>Top Questions</h2>
                 <Link to="/question/ask">
-                  <button className='askQuestionButton'>Ask Question</button>
+                  <button className='askQuestionButton' disabled={loading}>Ask Question</button>
                 </Link>
             </div>
             {questions.map((question) => (
